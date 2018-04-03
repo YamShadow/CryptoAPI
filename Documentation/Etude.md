@@ -1,4 +1,4 @@
-#API : Analyses crypto-monnaies
+#API : Analyses crypto-monnaies#
 ##Descriptif :
 Idéal
 API qui recense toutes les monnaies (via les API de Coinbase, Kraken…), qui permettra de comparer les sources, la fiabilité d’une monnaie. Avec une ‘’intelligence’’ qui conseille sur quelle monnaie investir à un instant T.
