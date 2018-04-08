@@ -1,14 +1,22 @@
+Cahier des charges fonctionnel et technique
+
 Nom du projet : CryptoAPI
 Nom d'équipe : CryptoAPI
 Préparé pour : ECV
 Préparé par : Mathieu Nibas et Dylan Oliveira
 
-A propos de l'outil
+Table des matières
+    Le projet
+        Objectifs
+        Contraintes
+    Glossaire
+
+Le projet
     Objectifs
-L'outil est une API qui recense toutes les crypto monnaies (via les API de Coinbase, Kraken…), et qui permettra de comparer les cours en fonction des sources.
+Réalisé une API qui recense toutes les crypto monnaies (via les API de Coinbase, Kraken…), et qui permettra de comparer les cours en fonction des sources.
 On pourra donc se rendre compte de la fiabilité d’une monnaie, et de l'intérêt à investir dans celle-ci.
 De plus, une 'intelligence' conseillera l'utilisateur sur la monnaie la plus intéréssante du moment, et sur les monnaies lesp lus prometteuses.
 
     Contraintes
-L’outil sera accessible depuis sur Internet. Il devra être rapide, efficace et disponible. 
+L’outil sera accessible sur Internet. Il devra être rapide, efficace et disponible. 
 De plus, il sera sécurisé.
