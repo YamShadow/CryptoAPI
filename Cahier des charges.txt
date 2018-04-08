@@ -10,3 +10,5 @@ On pourra donc se rendre compte de la fiabilité d’une monnaie, et de l'intér
 De plus, une 'intelligence' conseillera l'utilisateur sur la monnaie la plus intéréssante du moment, et sur les monnaies lesp lus prometteuses.
 
     Contraintes
+L’outil sera accessible depuis sur Internet. Il devra être rapide, efficace et disponible. 
+De plus, il sera sécurisé.
