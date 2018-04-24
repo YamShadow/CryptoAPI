@@ -1,0 +1,11 @@
+{
+  "name": "environnement",
+  "version": "1.0.0",
+  "description": "Surcouche du systeme d'initialisation de CodeIgniter",
+  "main": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mathieu Nibas",
+  "license": "Push Up Agency"
+}
