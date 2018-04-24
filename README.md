@@ -1,2 +1,2 @@
 # CryptoAPI
-API dédié au Cryptomonnaie
+API dédiée aux Crypto-monnaies
