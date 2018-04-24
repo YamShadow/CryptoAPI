@@ -28,3 +28,9 @@ Lien : https://www.coinapi.io
 Lien : https://www.cryptocompare.com/api/#introduction
 
 Exemple : https://min-api.cryptocompare.com/data/pricehistorical?fsym=ETH&tsyms=BTC,USD,EUR
+ 
+ ## API taux de change 
+
+ https://fixer.io/
+
+ 

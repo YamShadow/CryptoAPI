@@ -54,3 +54,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 $route['default_controller'] = 'IndexController';
 $route['translate_uri_dashes'] = FALSE;
+
+/*
+| -------------------------------------------------------------------------
+| Sample REST API Routes
+| -------------------------------------------------------------------------
+*/
+$route['api/example/users/(:num)'] = 'API/example/users/id/$1'; // Example 4
