@@ -4,6 +4,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 require APPPATH . 'libraries/REST_Controller.php';
 
 class Example extends REST_Controller {
+
+    private $users = [
+        ['id' => 1, 'name' => 'John', 'email' => 'john@example.com', 'fact' => 'Loves coding'],
+        ['id' => 2, 'name' => 'Jim', 'email' => 'jim@example.com', 'fact' => 'Developed on CodeIgniter'],
+        ['id' => 3, 'name' => 'Jane', 'email' => 'jane@example.com', 'fact' => 'Lives in the USA', ['hobbies' => ['guitar', 'cycling']]],
+    ];
+
     function __construct()
     {
 
@@ -19,20 +26,16 @@ class Example extends REST_Controller {
     function index_get() {
         echo 'lol';
     }
+
     public function users_get()
     {
-        $users = [
-            ['id' => 1, 'name' => 'John', 'email' => 'john@example.com', 'fact' => 'Loves coding'],
-            ['id' => 2, 'name' => 'Jim', 'email' => 'jim@example.com', 'fact' => 'Developed on CodeIgniter'],
-            ['id' => 3, 'name' => 'Jane', 'email' => 'jane@example.com', 'fact' => 'Lives in the USA', ['hobbies' => ['guitar', 'cycling']]],
-        ];
 
         $id = $this->get('id');
 
         if ($id === NULL) {
             
-            if ($users)
-                $this->response($users, REST_Controller::HTTP_OK);
+            if ($this->users)
+                $this->response($this->users, REST_Controller::HTTP_OK);
             else 
                 $this->response([
                     'status' => FALSE,
@@ -46,8 +49,8 @@ class Example extends REST_Controller {
             $this->response(NULL, REST_Controller::HTTP_BAD_REQUEST); 
         
         $user = NULL;
-        if (!empty($users)) {
-            foreach ($users as $key => $value) {
+        if (!empty($this->users)) {
+            foreach ($this->users as $key => $value) {
                 if (isset($value['id']) && $value['id'] === $id)
                     $user = $value;
             }
@@ -61,14 +64,16 @@ class Example extends REST_Controller {
                 'message' => 'User could not be found'
             ], REST_Controller::HTTP_NOT_FOUND);
     }
+
     public function users_post() {
         // $this->some_model->update_user( ... );
-        $message = [
-            'id' => 100, 
+        $this->users[] = $message = [
+            'id' => 4, 
             'name' => $this->post('name'),
             'email' => $this->post('email'),
             'message' => 'Added a resource'
         ];
+        
         $this->set_response($message, REST_Controller::HTTP_CREATED);
     }
     public function users_delete() {

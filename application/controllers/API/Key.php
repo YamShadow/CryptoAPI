@@ -204,3 +204,4 @@ class Key extends REST_Controller {
             ->where(config_item('rest_key_column'), $key)
             ->delete(config_item('rest_keys_table'));
     }
+}
