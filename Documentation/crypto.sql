@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Client :  127.0.0.1
--- Généré le :  Mer 02 Mai 2018 à 15:27
+-- Généré le :  Mer 02 Mai 2018 à 16:12
 -- Version du serveur :  5.7.14
 -- Version de PHP :  5.6.25
 
@@ -31,7 +31,8 @@ CREATE TABLE `echange` (
   `last_update` date DEFAULT NULL,
   `1h` int(11) DEFAULT NULL,
   `24h` int(11) DEFAULT NULL,
-  `7d` int(11) DEFAULT NULL
+  `7d` int(11) DEFAULT NULL,
+  `idMonnaieCrypto` int(11) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- --------------------------------------------------------
@@ -43,7 +44,8 @@ CREATE TABLE `echange` (
 CREATE TABLE `historique` (
   `id` int(11) NOT NULL,
   `rate` varchar(100) COLLATE utf8_bin DEFAULT NULL,
-  `last_update` date DEFAULT NULL
+  `last_update` date DEFAULT NULL,
+  `idMonnaieFiducaire` int(11) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- --------------------------------------------------------
@@ -58,7 +60,8 @@ CREATE TABLE `historique_prix` (
   `prix_btc` varchar(50) COLLATE utf8_bin DEFAULT NULL,
   `24h_vol_usd` int(11) DEFAULT NULL,
   `market_cap_usd` varchar(50) COLLATE utf8_bin DEFAULT NULL,
-  `last_update` date DEFAULT NULL
+  `last_update` date DEFAULT NULL,
+  `idMonnaieCrypto` int(11) DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- --------------------------------------------------------
@@ -94,19 +97,22 @@ CREATE TABLE `monnaie_fiduciaire` (
 -- Index pour la table `echange`
 --
 ALTER TABLE `echange`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `FK_Echange_MonnaieCrypto` (`idMonnaieCrypto`);
 
 --
 -- Index pour la table `historique`
 --
 ALTER TABLE `historique`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `FK_Historique_MonnaieFiduciaire` (`idMonnaieFiducaire`);
 
 --
 -- Index pour la table `historique_prix`
 --
 ALTER TABLE `historique_prix`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `FK_HistoriquePrix_MonnaieCrypto` (`idMonnaieCrypto`);
 
 --
 -- Index pour la table `monnaie_crypto`
