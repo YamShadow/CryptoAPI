@@ -17,7 +17,7 @@ class Exterieur extends CI_Model{
 
     function appelAPI($url) {
         $http = $this->reseau->initTrameReseau($url, 'get');
-
+        return $http;
     }
 
 

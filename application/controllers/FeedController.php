@@ -14,6 +14,7 @@ class FeedController extends CI_Controller {
     function __construct() {
         parent::__construct();
         $this->load->model('APIExterne/Exterieur', 'ext');
+        $this->load->model('APIExterne/CoinMarketCap', 'CoinMarketCap');
 	}
 
 	public function index() {
@@ -23,7 +24,7 @@ class FeedController extends CI_Controller {
     public function coinMarketCap() {
         $url = 'https://api.coinmarketcap.com/v1/ticker/?convert=EUR&limit=0';
         $ext = $this->ext->appelAPI($url);
-
+        $this->CoinMarketCap->traitementCoinMarketCap($ext);
         
     }
 

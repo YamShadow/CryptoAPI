@@ -41,10 +41,7 @@ class Reseau extends CI_Model{
             }
 
             if(isset($curl)){
-                echo '<pre>';
-                var_dump(json_decode($curl));
-                echo '</pre>';
-                
+                return json_decode($curl);
             }else
                 die('Code Erreur Reseau 10R2');
            
