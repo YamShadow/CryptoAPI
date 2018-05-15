@@ -63,5 +63,4 @@ $route['translate_uri_dashes'] = FALSE;
 $route['api/example/users/(:num)'] = 'API/example/users/id/$1'; // Example
 $route['api/cryptocurrencies'] = 'API/cryptocurrencies/cryptocurrencies'; // Toutes les crypto-monnaies
 $route['api/cryptocurrency/id/(:num)'] = 'API/cryptocurrencies/cryptocurrency/id/$1'; // Monnaie via son id
-$route['api/cryptocurrency/symbol/(:string)'] = 'API/cryptocurrencies/cryptocurrencysymbol/symbol/$BTC'; // Monnaie via son id
-
+$route['api/cryptocurrency/symbol/(:string)'] = 'API/cryptocurrencies/cryptocurrency/symbol/$1'; // Monnaie via son id
