@@ -64,22 +64,23 @@ $route['translate_uri_dashes'] = FALSE;
 $route['api/example/users/(:num)'] = 'API/example/users/id/$1'; // Example
 
 $route['api'] = 'API/API'; //Liste des routes
+$route['api/cryptocurrencies/(:num)'] = 'API/API/cryptocurrencies/id/$1'; //Liste des routes
 
 //Currencies
-$route['api/cryptocurrencies'] = 'API/cryptocurrencies'; // Toutes les crypto-monnaies
-$route['api/cryptocurrencies/id/(:num)'] = 'API/cryptocurrencies/$1'; // Monnaie via son id
-$route['api/cryptocurrencies/symbol/(.*)'] = 'API/cryptocurrencies/symbol/$3'; // Monnaie via son symbol
+// $route['api/cryptocurrencies'] = 'API/cryptocurrencies'; // Toutes les crypto-monnaies
+// $route['api/cryptocurrencies/(:num)'] = 'API/cryptocurrencies/id/$1'; // Monnaie via son id
+// $route['api/cryptocurrencies/symbol/(.*)'] = 'API/cryptocurrencies/symbol/$3'; // Monnaie via son symbol
 
-//Echanges
+// //Echanges
 
-$route['api/echanges'] = 'API/echanges'; // Liste les routes d'echanges
+// $route['api/echanges'] = 'API/echanges'; // Liste les routes d'echanges
 
-//by id
-$route['api/echanges/id/(:num)'] = 'API/echanges/id/$1'; // Toutes les echanges d'une monnaie
-$route['api/echanges/id/(:num)/limit/(:num)'] = 'API/echanges/id/$1/limit/$2'; // Toutes les echanges d'une monnaie avec une limit
-$route['api/echanges/id/(:num)/date/(.*)'] = 'API/echanges/id/$1/date/$2'; // Toutes les echanges d'une monnaie avec une date
+// //by id
+// $route['api/echanges/id/(:num)'] = 'API/echanges/id/$1'; // Toutes les echanges d'une monnaie
+// $route['api/echanges/id/(:num)/limit/(:num)'] = 'API/echanges/id/$1/limit/$2'; // Toutes les echanges d'une monnaie avec une limit
+// $route['api/echanges/id/(:num)/date/(.*)'] = 'API/echanges/id/$1/date/$2'; // Toutes les echanges d'une monnaie avec une date
 
-//by symbol
-$route['api/echanges/symbol/(.*)'] = 'API/echanges/symbol/$1'; // Toutes les echanges d'une monnaie via son symbol
-$route['api/echanges/symbol/(.*)/limit/(:num)'] = 'API/echanges/symbol/$1/limit/$2'; // Toutes les echanges d'une monnaie via son symbol avec limit
-$route['api/echanges/symbol/(.*)/date/(.*)'] = 'API/echanges/symbol/$1/date/$2'; // Toutes les echanges d'une monnaie via son symbol avec date
+// //by symbol
+// $route['api/echanges/symbol/(.*)'] = 'API/echanges/symbol/$1'; // Toutes les echanges d'une monnaie via son symbol
+// $route['api/echanges/symbol/(.*)/limit/(:num)'] = 'API/echanges/symbol/$1/limit/$2'; // Toutes les echanges d'une monnaie via son symbol avec limit
+// $route['api/echanges/symbol/(.*)/date/(.*)'] = 'API/echanges/symbol/$1/date/$2'; // Toutes les echanges d'une monnaie via son symbol avec date

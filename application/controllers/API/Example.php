@@ -31,7 +31,7 @@ class Example extends REST_Controller {
     {
 
         $id = $this->get('id');
-        var_dump($id);
+        //var_dump($id);
 
         if ($id === NULL) {
             
