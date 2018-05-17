@@ -60,6 +60,42 @@ class API extends REST_Controller
 
     function echanges_get() 
     {
+
+        $jointure = array(
+            'table' => 'echange',
+            'champs' => 'idMonnaieCrypto'
+        );
+        $limit = ($this->get('limit') !== null) ? $this->get('limit') : '50';
+
+        $id = $this->get('id');
+        if ($id !== NULL) {
+            $where = array(
+                'champs' => 'id',
+                'value' => $id
+            );
+        }
+
+        $symbol = $this->get('symbol');
+        if ($symbol !== NULL) {
+            $where = array(
+                'champs' => 'symbol',
+                'value' => strtoupper($symbol)
+            ); 
+        }
+
+        if (isset($where))
+            $echanges =$this->sql->getBDD('monnaie_crypto', $where, $jointure, null, $limit);
+       
+        if (isset($echanges)) {
+
+            if ($echanges)
+                $this->set_response($echanges, REST_Controller::HTTP_OK);
+            else
+                $this->set_response('Check your request', REST_Controller::HTTP_NOT_FOUND);
+            
+            return;
+        }
+
         $url = [
             'echange_id' => BASE_URL.'/api/echanges/id/{number}',
             'echange_id_limit' => BASE_URL.'/api/echanges/id/{number}/limit/{number}',

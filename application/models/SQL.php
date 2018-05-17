@@ -7,10 +7,15 @@ class SQL extends CI_Model{
         parent::__construct();
     }
 
-    function getBDD($table, $where = null, $limit = null)
+    function getBDD($table, $where = null, $jointure = null, $order = null, $limit = null)
     {
+
+        if($jointure !== null) {
+            $this->db->join($jointure['table'], $table.'.id ='.$jointure['table'].'.'.$jointure['champs']);
+        }
+
         if ($where !== null)
-            $this->db->where($where['champs'], $where['value']);
+            $this->db->where($table.'.'.$where['champs'], $where['value']);
 
         if ($limit !== null)
             $this->db->limit($limit);
