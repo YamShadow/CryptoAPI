@@ -24,6 +24,6 @@ function logCrypto($message){
     fclose($log);
 }
 
-function pr($msg) {
-  echo '<pre>'.print_r($msg).'</pre>';
+function dump($msg) {
+  echo '<pre>'.var_dump($msg).'</pre>';
 }

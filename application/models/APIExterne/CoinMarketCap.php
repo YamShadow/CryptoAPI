@@ -1,26 +1,20 @@
 <?php
 
-/**
- * Le model API_model permet de gerer l'API
- *
- * @author Mathieu <mnibas@pushupagency.fr>
- */
-
 class CoinMarketCap extends CI_Model{
-    /**
-     * Constructeur de la class
-     */
-    function __construct(){
+ 
+    function __construct()
+    {
         parent::__construct();
     }
 
-    function traitementCoinMarketCap($monnaies){
+    function traitementCoinMarketCap($monnaies)
+    {
 
-        foreach($monnaies as $monnaie) {
+        foreach ($monnaies as $monnaie) {
  
             $crypto = $this->checkExistanceMonnaie($monnaie->symbol);
 
-            if(!$crypto) {
+            if (!$crypto) {
                 // Ajout de la crypto
                 $array = array(
                     'name' => $monnaie->name,
@@ -30,8 +24,7 @@ class CoinMarketCap extends CI_Model{
                 $idCrypto = $this->insertBDD('monnaie_crypto', $array);
                 if($idCrypto)
                     $crypto = $this->checkExistanceMonnaie($monnaie->symbol);
-            }
-            else{
+            } else {
                 $array = array(
                     'rank' => $monnaie->rank
                 );
@@ -39,7 +32,7 @@ class CoinMarketCap extends CI_Model{
             }
 
             //Maj des echanges
-            if(!$this->checkUpdatePrices('echange', $monnaie->last_updated, $crypto->id)){
+            if (!$this->checkUpdatePrices('echange', $monnaie->last_updated, $crypto->id)) {
                 $echange = array(
                     'last_update' => $monnaie->last_updated,
                     '1h' => $monnaie->percent_change_1h,
@@ -51,10 +44,9 @@ class CoinMarketCap extends CI_Model{
             }
 
             //Maj des prix
-            if(!$this->checkUpdatePrices('historique_prix', $monnaie->last_updated, $crypto->id)){
+            if (!$this->checkUpdatePrices('historique_prix', $monnaie->last_updated, $crypto->id)) {
                 $string = '24h_volume_usd';
                 $prices = array(
-
                     'prix' => $monnaie->price_usd,
                     'prix_btc' => $monnaie->price_btc,
                     'vol_24h_usd' => $monnaie->$string,
@@ -62,13 +54,15 @@ class CoinMarketCap extends CI_Model{
                     'last_update' => $monnaie->last_updated,
                     'idMonnaieCrypto' => $crypto->id
                 );
+
                 $res = $this->insertBDD('historique_prix', $prices);
             }
 
         }
     }
 
-    function checkExistanceMonnaie($symb){
+    function checkExistanceMonnaie($symb)
+    {
         $query = $this->db->where('symbol', $symb)
                     ->get('monnaie_crypto');
         
@@ -77,7 +71,8 @@ class CoinMarketCap extends CI_Model{
         return false;
     }
 
-    function checkUpdatePrices($table, $lastUpdated, $idCrypto) {
+    function checkUpdatePrices($table, $lastUpdated, $idCrypto) 
+    {
         $query = $this->db->where('last_update', $lastUpdated)
                     ->where('idMonnaieCrypto', $idCrypto)
                     ->get($table);
@@ -89,14 +84,16 @@ class CoinMarketCap extends CI_Model{
 
     }
 
-    function insertBDD($table, $data) {
+    function insertBDD($table, $data) 
+    {
         $this->db->insert($table, $data);
         $insert_id = $this->db->insert_id();
 
         return  $insert_id;
     }
 
-    function updateBDD($table, $id, $data){        
+    function updateBDD($table, $id, $data)
+    {        
         $query = $this->db->where('id', $id)
                     ->update($table, $data);
 
@@ -106,9 +103,4 @@ class CoinMarketCap extends CI_Model{
         // return false;
     }
 
-
-
-
 }
-
-    

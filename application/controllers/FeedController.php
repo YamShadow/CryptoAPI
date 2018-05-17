@@ -25,6 +25,8 @@ class FeedController extends CI_Controller {
         $url = 'https://api.coinmarketcap.com/v1/ticker/?convert=EUR&limit=0';
         $ext = $this->ext->appelAPI($url);
         $this->CoinMarketCap->traitementCoinMarketCap($ext);
+
+        echo 'Feed ok !';
         
     }
 
