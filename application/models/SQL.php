@@ -17,6 +17,9 @@ class SQL extends CI_Model{
         if ($where !== null)
             $this->db->where($table.'.'.$where['champs'], $where['value']);
 
+        if($order !== null)
+            $this->db->order_by($order['champs'], $order['order']);
+
         if ($limit !== null)
             $this->db->limit($limit);
 
