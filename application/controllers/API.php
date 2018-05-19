@@ -10,6 +10,9 @@ class API extends REST_Controller
     {
         parent::__construct();
         $this->load->model('SQL', 'sql');
+        $this->load->driver('cache',
+            array('adapter' => 'apc', 'backup' => 'file', 'key_prefix' => 'api_')
+        );
     }
 
     function index_get() 
@@ -27,6 +30,7 @@ class API extends REST_Controller
         );
 
         $this->set_response($url, REST_Controller::HTTP_OK);
+
     }
 
     function cryptocurrencies_get(){
@@ -47,7 +51,12 @@ class API extends REST_Controller
             ); 
         }
 
-        $currencies = (isset($where)) ? $this->sql->getBDD('monnaie_crypto', $where) : $this->sql->getBDD('monnaie_crypto');
+        if (!$data = $this->cache->get('cryptoAll')) {
+            $data = $this->sql->getBDD('monnaie_crypto');
+            $this->cache->save('cryptoAll', $data, 300);
+        }
+
+        $currencies = (isset($where)) ? $this->sql->getBDD('monnaie_crypto', $where) : $data;
        
         if($currencies)
             $this->set_response($currencies, REST_Controller::HTTP_OK);
@@ -61,10 +70,6 @@ class API extends REST_Controller
     function echanges_get() 
     {
 
-        $jointure = array(
-            'table' => 'echange',
-            'champs' => 'idMonnaieCrypto'
-        );
         $limit = ($this->get('limit') !== null) ? $this->get('limit') : '50';
 
         $id = $this->get('id');
@@ -83,17 +88,36 @@ class API extends REST_Controller
             ); 
         }
 
-        if (isset($where))
-            $echanges =$this->sql->getBDD('monnaie_crypto', $where, $jointure, null, $limit);
-       
-        if (isset($echanges)) {
+        if (isset($where)) {
 
-            if ($echanges)
-                $this->set_response($echanges, REST_Controller::HTTP_OK);
-            else
-                $this->set_response('Check your request', REST_Controller::HTTP_NOT_FOUND);
-            
-            return;
+            $name = 'echange_'.$where['value'].'_'.$limit;
+
+            if (!$data = $this->cache->get($name)) {
+
+                $jointure = array(
+                    'table' => 'echange',
+                    'champs' => 'idMonnaieCrypto'
+                );
+    
+                $order = array(
+                    'champs' => "last_update",
+                    'order' => 'DESC',
+                );
+
+                $data =$this->sql->getBDD('monnaie_crypto', $where, $jointure, $order, $limit);
+
+                $this->cache->save($name, $data, 300);
+            }
+
+            if (isset($data)) {
+
+                if ($data)
+                    $this->set_response($data, REST_Controller::HTTP_OK);
+                else
+                    $this->set_response('Check your request', REST_Controller::HTTP_NOT_FOUND);
+                
+                return;
+            }
         }
 
         $url = [
