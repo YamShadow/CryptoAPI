@@ -10,17 +10,17 @@ class SQL extends CI_Model{
     function getBDD($table, $where = null, $jointure = null, $order = null, $limit = null)
     {
 
-        if($jointure !== null) {
+        if($jointure) {
             $this->db->join($jointure['table'], $table.'.id ='.$jointure['table'].'.'.$jointure['champs']);
         }
 
-        if ($where !== null)
+        if ($where)
             $this->db->where($table.'.'.$where['champs'], $where['value']);
 
-        if($order !== null)
+        if($order)
             $this->db->order_by($order['champs'], $order['order']);
 
-        if ($limit !== null)
+        if ($limit)
             $this->db->limit($limit);
 
         $query = $this->db->get($table);
@@ -31,6 +31,36 @@ class SQL extends CI_Model{
         return false;
     }
 
+    function getLimit($limit) { 
+       return ($limit !== null) ? $limit : '50';
+    }
+
+    function getWhere($id, $symbol = null) {
+
+        if ($id) {
+            $where = array(
+                'champs' => 'id',
+                'value' => $id
+            );
+        } else if ($symbol) {
+            $where = array(
+                'champs' => 'symbol',
+                'value' => strtoupper($symbol)
+            ); 
+        }
+
+        return $where;
+    }
+
+    function getCache($name, $table, $where, $jointure, $order, $limit) {
+
+        if (!$data = $this->cache->get($name)) {
+            $data =$this->sql->getBDD($table, $where, $jointure, $order, $limit);
+            $this->cache->save($name, $data, 300);
+        }
+
+        return $data;
+    }
 
 
 }

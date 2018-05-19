@@ -27,6 +27,13 @@ class API extends REST_Controller
             'echange_symb' => BASE_URL.'/api/echanges/symbol/{String}',
             'echange_symb_limit' => BASE_URL.'/api/echanges/symbol/{String}/limit/{number}',
             'echange_symb_date' => BASE_URL.'/api/echanges/symbol/{String}/date/{date}',
+            'historiques' => BASE_URL.'/api/historiques',
+            'historiques_id' => BASE_URL.'/api/historiques/id/{number}',
+            'historiques_id_limit' => BASE_URL.'/api/historiques/id/{number}/limit/{number}',
+            'historiques_id_date' => BASE_URL.'/api/historiques/id/{number}/date/{date}',
+            'historiques_symb' => BASE_URL.'/api/historiques/symbol/{String}',
+            'historiques_symb_limit' => BASE_URL.'/api/historiques/symbol/{String}/limit/{number}',
+            'historiques_symb_date' => BASE_URL.'/api/historiques/symbol/{String}/date/{date}',
         );
 
         $this->set_response($url, REST_Controller::HTTP_OK);
@@ -35,26 +42,9 @@ class API extends REST_Controller
 
     function cryptocurrencies_get(){
 
-        $id = $this->get('id');
-        if ($id !== NULL) {
-            $where = array(
-                'champs' => 'id',
-                'value' => $id
-            );
-        }
+        $where = $this->sql->getWhere($this->get('id'), $this->get('symbol'));
 
-        $symbol = $this->get('symbol');
-        if ($symbol !== NULL) {
-            $where = array(
-                'champs' => 'symbol',
-                'value' => strtoupper($symbol)
-            ); 
-        }
-
-        if (!$data = $this->cache->get('cryptoAll')) {
-            $data = $this->sql->getBDD('monnaie_crypto');
-            $this->cache->save('cryptoAll', $data, 300);
-        }
+        $data = $this->sql->getCache('cryptoAll', 'monnaie_crypto', $where, null, null, null);
 
         $currencies = (isset($where)) ? $this->sql->getBDD('monnaie_crypto', $where) : $data;
        
@@ -70,44 +60,24 @@ class API extends REST_Controller
     function echanges_get() 
     {
 
-        $limit = ($this->get('limit') !== null) ? $this->get('limit') : '50';
-
-        $id = $this->get('id');
-        if ($id !== NULL) {
-            $where = array(
-                'champs' => 'id',
-                'value' => $id
-            );
-        }
-
-        $symbol = $this->get('symbol');
-        if ($symbol !== NULL) {
-            $where = array(
-                'champs' => 'symbol',
-                'value' => strtoupper($symbol)
-            ); 
-        }
+        $limit = $this->sql->getLimit($this->get('limit'));
+        $where = $this->sql->getWhere($this->get('id'), $this->get('symbol'));
 
         if (isset($where)) {
 
             $name = 'echange_'.$where['value'].'_'.$limit;
 
-            if (!$data = $this->cache->get($name)) {
+            $jointure = array(
+                'table' => 'echange',
+                'champs' => 'idMonnaieCrypto'
+            );
 
-                $jointure = array(
-                    'table' => 'echange',
-                    'champs' => 'idMonnaieCrypto'
-                );
-    
-                $order = array(
-                    'champs' => "last_update",
-                    'order' => 'DESC',
-                );
+            $order = array(
+                'champs' => "last_update",
+                'order' => 'DESC',
+            );
 
-                $data =$this->sql->getBDD('monnaie_crypto', $where, $jointure, $order, $limit);
-
-                $this->cache->save($name, $data, 300);
-            }
+            $data = $this->sql->getCache($name, 'monnaie_crypto', $where, $jointure, $order, $limit);
 
             if (isset($data)) {
 
@@ -130,6 +100,53 @@ class API extends REST_Controller
         ];
 
         $this->set_response($url, REST_Controller::HTTP_OK);
+        return;
+    }
+
+    function historiques_get() {
+
+        $limit = $this->sql->getLimit($this->get('limit'));
+        $where = $this->sql->getWhere($this->get('id'), $this->get('symbol'));
+
+        if (isset($where)) {
+
+            $name = 'histo_'.$where['value'].'_'.$limit;
+
+            $jointure = array(
+                'table' => 'historique_prix',
+                'champs' => 'idMonnaieCrypto'
+            );
+
+            $order = array(
+                'champs' => "last_update",
+                'order' => 'DESC',
+            );
+
+            $data = $this->sql->getCache($name, 'monnaie_crypto', $where, $jointure, $order, $limit);
+
+            if (isset($data)) {
+
+                if ($data)
+                    $this->set_response($data, REST_Controller::HTTP_OK);
+                else
+                    $this->set_response('Check your request', REST_Controller::HTTP_NOT_FOUND);
+                
+                return;
+            }
+        }
+
+        $url = [
+            'historiques_id' => BASE_URL.'/api/historiques/id/{number}',
+            'historiques_id_limit' => BASE_URL.'/api/historiques/id/{number}/limit/{number}',
+            'historiques_id_date' => BASE_URL.'/api/historiques/id/{number}/date/{date}',
+            'historiques_symb' => BASE_URL.'/api/historiques/symbol/{String}',
+            'historiques_symb_limit' => BASE_URL.'/api/historiques/symbol/{String}/limit/{number}',
+            'historiques_symb_date' => BASE_URL.'/api/historiques/symbol/{String}/date/{date}',
+        ];
+
+        $this->set_response($url, REST_Controller::HTTP_OK);
+        return;
+
     }
 
 }

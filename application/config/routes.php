@@ -66,22 +66,34 @@ $route['api/example/users/(:num)'] = 'API/example/users/id/$1'; // Example
 //$route['api'] = 'API/'; //Liste des routes
 
 //Currencies
-$route['api/cryptocurrencies'] = 'API/cryptocurrencies'; // Toutes les crypto-monnaies
-$route['api/cryptocurrencies/id/(:num)'] = 'API/cryptocurrencies/id/$1'; // Monnaie via son id
-$route['api/cryptocurrencies/symbol/(.*)'] = 'API/cryptocurrencies/symbol/$1'; // Monnaie via son symbol
+$route['cryptocurrencies'] = 'API/cryptocurrencies'; // Toutes les crypto-monnaies
+$route['cryptocurrencies/id/(:num)'] = 'API/cryptocurrencies/id/$1'; // Monnaie via son id
+$route['cryptocurrencies/symbol/(.*)'] = 'API/cryptocurrencies/symbol/$1'; // Monnaie via son symbol
 
 // //Echanges
 
-$route['api/echanges'] = 'API/echanges'; // Liste les routes d'echanges
+$route['echanges'] = 'API/echanges'; // Liste les routes d'echanges
 
 // //by id
-$route['api/echanges/id/(:num)'] = 'API/echanges/id/$1'; // Toutes les echanges d'une monnaie
-$route['api/echanges/id/(:num)/limit/(:num)'] = 'API/echanges/id/$1/limit/$2'; // Toutes les echanges d'une monnaie avec une limit
-$route['api/echanges/id/(:num)/date/(.*)'] = 'API/echanges/id/$1/date/$2'; // Toutes les echanges d'une monnaie avec une date
+$route['echanges/id/(:num)'] = 'API/echanges/id/$1'; // Toutes les echanges d'une monnaie
+$route['echanges/id/(:num)/limit/(:num)'] = 'API/echanges/id/$1/limit/$2'; // Toutes les echanges d'une monnaie avec une limit
+$route['echanges/id/(:num)/date/(.*)'] = 'API/echanges/id/$1/date/$2'; // Toutes les echanges d'une monnaie avec une date
 
 // //by symbol
-$route['api/echanges/symbol/(.*)'] = 'API/echanges/symbol/$1'; // Toutes les echanges d'une monnaie via son symbol
-$route['api/echanges/symbol/(.*)/limit/(:num)'] = 'API/echanges/symbol/$1/limit/$2'; // Toutes les echanges d'une monnaie via son symbol avec limit
-$route['api/echanges/symbol/(.*)/date/(.*)'] = 'API/echanges/symbol/$1/date/$2'; // Toutes les echanges d'une monnaie via son symbol avec date
+$route['echanges/symbol/(.*)'] = 'API/echanges/symbol/$1'; // Toutes les echanges d'une monnaie via son symbol
+$route['echanges/symbol/(.*)/limit/(:num)'] = 'API/echanges/symbol/$1/limit/$2'; // Toutes les echanges d'une monnaie via son symbol avec limit
+$route['echanges/symbol/(.*)/date/(.*)'] = 'API/echanges/symbol/$1/date/$2'; // Toutes les echanges d'une monnaie via son symbol avec date
 
-$route['api/(.*)'] = "API";
+$route['historiques'] = 'API/historiques'; // Liste des routes d'historiques
+
+// //by id
+$route['historiques/id/(:num)'] = 'API/historiques/id/$1'; // Toutes les historiques d'une monnaie
+$route['historiques/id/(:num)/limit/(:num)'] = 'API/historiques/id/$1/limit/$2'; // Toutes les historiques d'une monnaie avec une limit
+$route['historiques/id/(:num)/date/(.*)'] = 'API/historiques/id/$1/date/$2'; // Toutes les historiques d'une monnaie avec une date
+
+// //by symbol
+$route['historiques/symbol/(.*)'] = 'API/historiques/symbol/$1'; // Toutes les historiques d'une monnaie via son symbol
+$route['historiques/symbol/(.*)/limit/(:num)'] = 'API/historiques/symbol/$1/limit/$2'; // Toutes les historiques d'une monnaie via son symbol avec limit
+$route['historiques/symbol/(.*)/date/(.*)'] = 'API/historiques/symbol/$1/date/$2'; // Toutes les historiques d'une monnaie via son symbol avec date
+
+$route['(.*)'] = "API";
