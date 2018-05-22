@@ -49,7 +49,7 @@ class SQL extends CI_Model{
             ); 
         }
 
-        return $where;
+        return (isset($where)) ? $where : false;
     }
 
     function getCache($name, $table, $where, $jointure, $order, $limit) {
