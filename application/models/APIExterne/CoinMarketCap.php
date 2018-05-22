@@ -5,6 +5,7 @@ class CoinMarketCap extends CI_Model{
     function __construct()
     {
         parent::__construct();
+        $this->load->model('SQL', 'sql');
     }
 
     function traitementCoinMarketCap($monnaies)
@@ -21,14 +22,14 @@ class CoinMarketCap extends CI_Model{
                     'symbol' => $monnaie->symbol,
                     'rank' => $monnaie->rank,
                 );
-                $idCrypto = $this->insertBDD('monnaie_crypto', $array);
+                $idCrypto = $this->sql->insertBDD('monnaie_crypto', $array);
                 if($idCrypto)
                     $crypto = $this->checkExistanceMonnaie($monnaie->symbol);
             } else {
                 $array = array(
                     'rank' => $monnaie->rank
                 );
-                $return = $this->updateBDD('monnaie_crypto', $crypto->id, $array);
+                $return = $this->sql->updateBDD('monnaie_crypto', $crypto->id, $array);
             }
 
             //Maj des echanges
@@ -40,7 +41,7 @@ class CoinMarketCap extends CI_Model{
                     '7d' => $monnaie->percent_change_7d,
                     'idMonnaieCrypto' => $crypto->id
                 );
-                $res = $this->insertBDD('echange', $echange);
+                $res = $this->sql->insertBDD('echange', $echange);
             }
 
             //Maj des prix
@@ -55,7 +56,7 @@ class CoinMarketCap extends CI_Model{
                     'idMonnaieCrypto' => $crypto->id
                 );
 
-                $res = $this->insertBDD('historique_prix', $prices);
+                $res = $this->sql->insertBDD('historique_prix', $prices);
             }
 
         }
@@ -80,27 +81,6 @@ class CoinMarketCap extends CI_Model{
         if ($query->num_rows() >= 1)
             return true;
         return false;
-
-
-    }
-
-    function insertBDD($table, $data) 
-    {
-        $this->db->insert($table, $data);
-        $insert_id = $this->db->insert_id();
-
-        return  $insert_id;
-    }
-
-    function updateBDD($table, $id, $data)
-    {        
-        $query = $this->db->where('id', $id)
-                    ->update($table, $data);
-
-        return true;
-        // if($query->affected_rows() >=1)
-        //     return true;
-        // return false;
     }
 
 }
