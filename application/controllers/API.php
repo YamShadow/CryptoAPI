@@ -65,6 +65,43 @@ class API extends REST_Controller
         $limit = $this->sql->getLimit($this->get('limit'));
         $where = $this->sql->getWhere($this->get('id'), $this->get('symbol'));
 
+
+        if (isset($top)) {
+
+            $name = 'echange_'.$where['value'].'_'.$limit;
+
+            $jointure = array(
+                'table' => 'monnaie_crypto',
+                'champs' => 'idMonnaieCrypto'
+            );
+
+            $where = array(
+                'champs' => 'echange',
+                'value' => 'idMonnaieCrypto'
+            );
+
+            $order = array(
+                'champs' => $top,
+                'order' => 'DESC',
+            );
+
+            $limit = '3';
+
+            $data = $this->sql->getCache($name, 'echange', $where, $jointure, $order, $limit);
+
+            if (isset($data)) {
+
+                if ($data)
+                    $this->set_response($data, REST_Controller::HTTP_OK);
+                else
+                    $this->set_response('Check your request', REST_Controller::HTTP_NOT_FOUND);
+                
+                return;
+            }
+        }
+
+
+
         if (isset($where)) {
 
             $name = 'echange_'.$where['value'].'_'.$limit;
