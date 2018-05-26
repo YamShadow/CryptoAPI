@@ -35,20 +35,16 @@ class FeedController extends CI_Controller {
         $endpoint = 'latest';
         $access_key = 'API_KEY';
         $url = 'http://data.fixer.io/api/symbols?access_key='.$access_key;
-        //$url = 'http://data.fixer.io/api/'.$endpoint.'?access_key='.$access_key;
 
-        var_dump($url);
         $ext = $this->ext->appelAPI($url);
-        echo '<pre>';
-        var_dump($ext);
-        echo '</pre>';
         $this->fixer->addMonnaie($ext->symbols);
 
+        $url = 'http://data.fixer.io/api/'.$endpoint.'?access_key='.$access_key;
+        $ext = $this->ext->appelAPI($url);
+        $this->fixer->AddRates($ext);
 
-       
+        echo 'Feed Fixer ok !<br/>';
     }
-
-
 
 
 }
