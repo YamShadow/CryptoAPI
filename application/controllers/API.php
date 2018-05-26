@@ -71,18 +71,24 @@ class API extends REST_Controller
             $name = 'echange_'.$where['value'].'_'.$limit;
 
             $jointure = array(
-                'table' => 'monnaie_crypto',
-                'champs' => 'idMonnaieCrypto'
+                0 => array(
+                    'table' => 'monnaie_crypto',
+                    'champs' => 'idMonnaieCrypto'
+                ),
             );
 
             $where = array(
-                'champs' => 'echange',
-                'value' => 'idMonnaieCrypto'
+                0 => array(
+                    'champs' => 'echange',
+                    'value' => 'idMonnaieCrypto'
+                ),
             );
 
             $order = array(
-                'champs' => $top,
-                'order' => 'DESC',
+                0 => array(
+                    'champs' => $top,
+                    'order' => 'DESC',
+                ),
             );
 
             $limit = '3';
@@ -100,20 +106,22 @@ class API extends REST_Controller
             }
         }
 
-
-
         if (isset($where)) {
 
-            $name = 'echange_'.$where['value'].'_'.$limit;
+            $name = 'echange_'.$where[0]['value'].'_'.$limit;
 
             $jointure = array(
-                'table' => 'echange',
-                'champs' => 'idMonnaieCrypto'
+                0 => array(
+                    'table' => 'echange',
+                    'champs' => 'idMonnaieCrypto'
+                ),
             );
 
             $order = array(
-                'champs' => "last_update",
-                'order' => 'DESC',
+                0 => array(
+                    'champs' => "last_update",
+                    'order' => 'DESC',
+                ),
             );
 
             $data = $this->sql->getCache($name, 'monnaie_crypto', $where, $jointure, $order, $limit);
@@ -149,16 +157,20 @@ class API extends REST_Controller
 
         if (isset($where)) {
 
-            $name = 'histo_'.$where['value'].'_'.$limit;
+            $name = 'histo_'.$where[0]['value'].'_'.$limit;
 
             $jointure = array(
-                'table' => 'historique_prix',
-                'champs' => 'idMonnaieCrypto'
+                0 => array(
+                    'table' => 'historique_prix',
+                    'champs' => 'idMonnaieCrypto'
+                ),
             );
 
             $order = array(
-                'champs' => "last_update",
-                'order' => 'DESC',
+                0 => array(
+                    'champs' => "last_update",
+                    'order' => 'DESC',
+                ),
             );
 
             $data = $this->sql->getCache($name, 'monnaie_crypto', $where, $jointure, $order, $limit);

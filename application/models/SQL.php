@@ -11,14 +11,17 @@ class SQL extends CI_Model{
     {
 
         if($jointure) {
-            $this->db->join($jointure['table'], $table.'.id ='.$jointure['table'].'.'.$jointure['champs']);
+            foreach($jointure as $j)
+                $this->db->join($j['table'], $table.'.id ='.$j['table'].'.'.$j['champs']);
         }
 
         if ($where)
-            $this->db->where($table.'.'.$where['champs'], $where['value']);
+            foreach($where as $w)
+                $this->db->where($table.'.'.$w['champs'], $w['value']);
 
         if($order)
-            $this->db->order_by($order['champs'], $order['order']);
+            foreach($order as $o)
+                $this->db->order_by($o['champs'], $o['order']);
 
         if ($limit)
             $this->db->limit($limit);
@@ -39,13 +42,17 @@ class SQL extends CI_Model{
 
         if ($id) {
             $where = array(
-                'champs' => 'id',
-                'value' => $id
+                0 => array(
+                    'champs' => 'id',
+                    'value' => $id
+                ),
             );
         } else if ($symbol) {
             $where = array(
-                'champs' => 'symbol',
-                'value' => strtoupper($symbol)
+                0 => array(
+                    'champs' => 'symbol',
+                    'value' => strtoupper($symbol)
+                ),
             ); 
         }
 
@@ -74,7 +81,7 @@ class SQL extends CI_Model{
     {        
         $query = $this->db->where('id', $id)
                     ->update($table, $data);
-                    
+
         return true;
         // if($query->affected_rows() >=1)
         //     return true;
