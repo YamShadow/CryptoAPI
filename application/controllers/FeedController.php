@@ -15,10 +15,12 @@ class FeedController extends CI_Controller {
         parent::__construct();
         $this->load->model('APIExterne/Exterieur', 'ext');
         $this->load->model('APIExterne/CoinMarketCap', 'CoinMarketCap');
+        $this->load->model('APIExterne/Fixer', 'fixer');
 	}
 
 	public function index() {
-		$this->coinMarketCap();
+        $this->coinMarketCap();
+        $this->fixer();
     }
     
     public function coinMarketCap() {
@@ -26,8 +28,24 @@ class FeedController extends CI_Controller {
         $ext = $this->ext->appelAPI($url);
         $this->CoinMarketCap->traitementCoinMarketCap($ext);
 
-        echo 'Feed ok !';
-        
+        echo 'Feed coinMarketCap ok !<br/>';
+    }
+
+    public function fixer() {
+        $endpoint = 'latest';
+        $access_key = 'API_KEY';
+        $url = 'http://data.fixer.io/api/symbols?access_key='.$access_key;
+        //$url = 'http://data.fixer.io/api/'.$endpoint.'?access_key='.$access_key;
+
+        var_dump($url);
+        $ext = $this->ext->appelAPI($url);
+        echo '<pre>';
+        var_dump($ext);
+        echo '</pre>';
+        $this->fixer->addMonnaie($ext->symbols);
+
+
+       
     }
 
 
