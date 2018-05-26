@@ -58,9 +58,9 @@ class API extends REST_Controller
         $currencies = ($where) ? $this->sql->getBDD($sql) : $data;
        
         if($currencies)
-            $this->set_response($currencies, REST_Controller::HTTP_OK);
+            $this->set_response(uniformisationReponse(true, $currencies), REST_Controller::HTTP_OK);
         else 
-            $this->set_response('Check your request', REST_Controller::HTTP_NOT_FOUND);
+            $this->set_response(uniformisationReponse(false, null, 'Check your request'), REST_Controller::HTTP_NOT_FOUND);
 
         return;
         
@@ -121,9 +121,9 @@ class API extends REST_Controller
                 if (isset($data)) {
 
                     if ($data)
-                        $this->set_response($data, REST_Controller::HTTP_OK);
+                        $this->set_response(uniformisationReponse(true, $data), REST_Controller::HTTP_OK);
                     else
-                        $this->set_response('Check your request', REST_Controller::HTTP_NOT_FOUND);
+                        $this->set_response(uniformisationReponse(false, null, 'Check your request'), REST_Controller::HTTP_NOT_FOUND);
                     
                     return;
                 }
@@ -168,9 +168,9 @@ class API extends REST_Controller
             if (isset($data)) {
 
                 if ($data)
-                    $this->set_response($data, REST_Controller::HTTP_OK);
+                    $this->set_response(uniformisationReponse(true, $data), REST_Controller::HTTP_OK);
                 else
-                    $this->set_response('Check your request', REST_Controller::HTTP_NOT_FOUND);
+                    $this->set_response(uniformisationReponse(false, null, 'Check your request'), REST_Controller::HTTP_NOT_FOUND);
                 
                 return;
             }
@@ -224,9 +224,9 @@ class API extends REST_Controller
             if (isset($data)) {
 
                 if ($data)
-                    $this->set_response($data, REST_Controller::HTTP_OK);
+                    $this->set_response(uniformisationReponse(true, $data), REST_Controller::HTTP_OK);
                 else
-                    $this->set_response('Check your request', REST_Controller::HTTP_NOT_FOUND);
+                    $this->set_response(uniformisationReponse(false, null, 'Check your request'), REST_Controller::HTTP_NOT_FOUND);
                 
                 return;
             }

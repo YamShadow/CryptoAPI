@@ -27,3 +27,11 @@ function logCrypto($message){
 function dump($msg) {
   echo '<pre>'.var_dump($msg).'</pre>';
 }
+
+function uniformisationReponse($success, $data, $errors = null){
+  return array(
+    "success" => $success, 
+    "reponses" => $data, 
+    "errors" => $errors
+  );
+}
