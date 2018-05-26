@@ -73,38 +73,40 @@ class API extends REST_Controller
         $where = $this->sql->getWhere($this->get('id'), $this->get('symbol'));
         $top = strtolower($this->get('top'));
 
+        if (isset($date) && $date) {
+            $date = explode("-", $this->get('date'));
+        }
+        else {
+            $date = array('date("Y")', 'date("m")', 'date("d")');
+        }
+
         if (isset($top) && $top) {
             if(in_array($top, array('1h', '24h', '7d'))) {
                 $name = 'echange_'.$top.'_'.$limit;
 
                 $sql = array(
-                    'select' => 'monnaie_crypto.*, echange.*, max(7d)',
+                    'select' => '*',
                     'table' => 'echange',
                     'join' => array(
                         0 => array(
                             'champsTable' => 'idMonnaieCrypto',
                             'table' => 'monnaie_crypto',
                             'champs' => 'id',
-                            'sens' => 'left'
+                            'sens' => 'right'
                         ),
                     ),
                     'where' => array(
                         0 => array(
                             'champs' => 'year(last_update)',
-                            'value' => '2018'
+                            'value' => $date[0]
                         ),
                         1 => array(
                             'champs' => 'month(last_update)',
-                            'value' => '5'
+                            'value' => $date[1]
                         ),
                         2 => array(
                             'champs' => 'day(last_update)',
-                            'value' => '12'
-                        ),
-                    ),
-                    'group' => array(
-                        0 => array(
-                            'champs' => 'echange.idMonnaieCrypto'
+                            'value' => $date[2]
                         ),
                     ),
                     'order' => array(
@@ -130,8 +132,8 @@ class API extends REST_Controller
             }
             else{
                 $url = [
-                    'echange_top' => BASE_URL.'echanges/top/{1h|24h|7d}',
-                    'echange_top_limit' => BASE_URL.'echanges/top/{1h|24h|7d}/limit/{number}',
+                    'echange_top' => BASE_URL.'echanges/top/{1h|24h|7d}/date/yyyy-mm-dd',
+                    'echange_top_limit' => BASE_URL.'echanges/top/{1h|24h|7d}/date/yyyy-mm-dd/limit/{number}',
                 ];
         
                 $this->set_response($url, REST_Controller::HTTP_OK);
