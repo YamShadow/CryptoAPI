@@ -98,9 +98,7 @@ $route['historiques/symbol/(.*)'] = 'API/historiques/symbol/$1'; // Toutes les h
 $route['historiques/symbol/(.*)/limit/(:num)'] = 'API/historiques/symbol/$1/limit/$2'; // Toutes les historiques d'une monnaie via son symbol avec limit
 $route['historiques/symbol/(.*)/date/(.*)'] = 'API/historiques/symbol/$1/date/$2'; // Toutes les historiques d'une monnaie via son symbol avec date
 
-
-
-$route['(.*)'] = "API";
-
 //Top 5 des crypto-monnaies en fonction des échanges
 $route['echanges/top/(.*)'] = 'API/echanges/top/$1';
+
+$route['(.*)'] = "API";

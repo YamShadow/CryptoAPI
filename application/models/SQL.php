@@ -74,7 +74,7 @@ class SQL extends CI_Model{
     {        
         $query = $this->db->where('id', $id)
                     ->update($table, $data);
-
+                    
         return true;
         // if($query->affected_rows() >=1)
         //     return true;

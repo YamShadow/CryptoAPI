@@ -35,7 +35,7 @@ class CoinMarketCap extends CI_Model{
             //Maj des echanges
             if (!$this->checkUpdatePrices('echange', $monnaie->last_updated, $crypto->id)) {
                 $echange = array(
-                    'last_update' => $monnaie->last_updated,
+                    'last_update' => date('Y-m-d H:i:s', $monnaie->last_updated),
                     '1h' => $monnaie->percent_change_1h,
                     '24h' => $monnaie->percent_change_24h,
                     '7d' => $monnaie->percent_change_7d,
@@ -52,7 +52,7 @@ class CoinMarketCap extends CI_Model{
                     'prix_btc' => $monnaie->price_btc,
                     'vol_24h_usd' => $monnaie->$string,
                     'market_cap_usd' => $monnaie->market_cap_usd,
-                    'last_update' => $monnaie->last_updated,
+                    'last_update' => date('Y-m-d H:i:s', $monnaie->last_updated),
                     'idMonnaieCrypto' => $crypto->id
                 );
 
