@@ -20,22 +20,24 @@ class API extends REST_Controller
     function index_get() 
     {
         $url = array(
-            'cryptocurrencies' => BASE_URL.'/api/cryptocurrencies',
-            'cryptocurrencies_id' => BASE_URL.'/api/cryptocurrencies/id/{number}',
-            'echange' => BASE_URL.'/api/echanges',
-            'echange_id' => BASE_URL.'/api/echanges/id/{number}',
-            'echange_id_limit' => BASE_URL.'/api/echanges/id/{number}/limit/{number}',
-            'echange_id_date' => BASE_URL.'/api/echanges/id/{number}/date/{date}',
-            'echange_symb' => BASE_URL.'/api/echanges/symbol/{String}',
-            'echange_symb_limit' => BASE_URL.'/api/echanges/symbol/{String}/limit/{number}',
-            'echange_symb_date' => BASE_URL.'/api/echanges/symbol/{String}/date/{date}',
-            'historiques' => BASE_URL.'/api/historiques',
-            'historiques_id' => BASE_URL.'/api/historiques/id/{number}',
-            'historiques_id_limit' => BASE_URL.'/api/historiques/id/{number}/limit/{number}',
-            'historiques_id_date' => BASE_URL.'/api/historiques/id/{number}/date/{date}',
-            'historiques_symb' => BASE_URL.'/api/historiques/symbol/{String}',
-            'historiques_symb_limit' => BASE_URL.'/api/historiques/symbol/{String}/limit/{number}',
-            'historiques_symb_date' => BASE_URL.'/api/historiques/symbol/{String}/date/{date}',
+            'cryptocurrencies' => BASE_URL.'cryptocurrencies',
+            'cryptocurrencies_id' => BASE_URL.'cryptocurrencies/id/{number}',
+            'echange' => BASE_URL.'echanges',
+            'echange_id' => BASE_URL.'echanges/id/{number}',
+            'echange_id_limit' => BASE_URL.'echanges/id/{number}/limit/{number}',
+            'echange_id_date' => BASE_URL.'echanges/id/{number}/date/{date}',
+            'echange_symb' => BASE_URL.'echanges/symbol/{String}',
+            'echange_symb_limit' => BASE_URL.'echanges/symbol/{String}/limit/{number}',
+            'echange_symb_date' => BASE_URL.'echanges/symbol/{String}/date/{date}',
+            'echange_top' => BASE_URL.'echanges/top/{1h|24h|7d}',
+            'echange_top_limit' => BASE_URL.'echanges/top/{1h|24h|7d}/limit/{number}',
+            'historiques' => BASE_URL.'historiques',
+            'historiques_id' => BASE_URL.'historiques/id/{number}',
+            'historiques_id_limit' => BASE_URL.'historiques/id/{number}/limit/{number}',
+            'historiques_id_date' => BASE_URL.'historiques/id/{number}/date/{date}',
+            'historiques_symb' => BASE_URL.'historiques/symbol/{String}',
+            'historiques_symb_limit' => BASE_URL.'historiques/symbol/{String}/limit/{number}',
+            'historiques_symb_date' => BASE_URL.'historiques/symbol/{String}/date/{date}',
         );
 
         $this->set_response($url, REST_Controller::HTTP_OK);
@@ -46,9 +48,14 @@ class API extends REST_Controller
 
         $where = $this->sql->getWhere($this->get('id'), $this->get('symbol'));
 
-        $data = $this->sql->getCache('cryptoAll', 'monnaie_crypto', $where, null, null, null);
+        $sql = array(
+            'table' => 'monnaie_crypto',
+            'where' => $where
+        );
 
-        $currencies = (isset($where)) ? $this->sql->getBDD('monnaie_crypto', $where) : $data;
+        $data = $this->sql->getCache('cryptoAll', $sql);
+
+        $currencies = ($where) ? $this->sql->getBDD($sql) : $data;
        
         if($currencies)
             $this->set_response($currencies, REST_Controller::HTTP_OK);
@@ -64,67 +71,99 @@ class API extends REST_Controller
 
         $limit = $this->sql->getLimit($this->get('limit'));
         $where = $this->sql->getWhere($this->get('id'), $this->get('symbol'));
+        $top = strtolower($this->get('top'));
 
+        if (isset($top) && $top) {
+            if(in_array($top, array('1h', '24h', '7d'))) {
+                $name = 'echange_'.$top.'_'.$limit;
 
-        if (isset($top)) {
+                $sql = array(
+                    'select' => 'monnaie_crypto.*, echange.*, max(7d)',
+                    'table' => 'echange',
+                    'join' => array(
+                        0 => array(
+                            'champsTable' => 'idMonnaieCrypto',
+                            'table' => 'monnaie_crypto',
+                            'champs' => 'id',
+                            'sens' => 'left'
+                        ),
+                    ),
+                    'where' => array(
+                        0 => array(
+                            'champs' => 'year(last_update)',
+                            'value' => '2018'
+                        ),
+                        1 => array(
+                            'champs' => 'month(last_update)',
+                            'value' => '5'
+                        ),
+                        2 => array(
+                            'champs' => 'day(last_update)',
+                            'value' => '12'
+                        ),
+                    ),
+                    'group' => array(
+                        0 => array(
+                            'champs' => 'echange.idMonnaieCrypto'
+                        ),
+                    ),
+                    'order' => array(
+                        0 => array(
+                            'champs' => $top,
+                            'order' => 'DESC',
+                        ),
+                    ),
+                    'limit' => $limit
+                );
 
-            $name = 'echange_'.$where['value'].'_'.$limit;
+                $data = $this->sql->getCache($name, $sql);
 
-            $jointure = array(
-                0 => array(
-                    'table' => 'monnaie_crypto',
-                    'champs' => 'idMonnaieCrypto'
-                ),
-            );
+                if (isset($data)) {
 
-            $where = array(
-                0 => array(
-                    'champs' => 'echange',
-                    'value' => 'idMonnaieCrypto'
-                ),
-            );
-
-            $order = array(
-                0 => array(
-                    'champs' => $top,
-                    'order' => 'DESC',
-                ),
-            );
-
-            $limit = '3';
-
-            $data = $this->sql->getCache($name, 'echange', $where, $jointure, $order, $limit);
-
-            if (isset($data)) {
-
-                if ($data)
-                    $this->set_response($data, REST_Controller::HTTP_OK);
-                else
-                    $this->set_response('Check your request', REST_Controller::HTTP_NOT_FOUND);
-                
+                    if ($data)
+                        $this->set_response($data, REST_Controller::HTTP_OK);
+                    else
+                        $this->set_response('Check your request', REST_Controller::HTTP_NOT_FOUND);
+                    
+                    return;
+                }
+            }
+            else{
+                $url = [
+                    'echange_top' => BASE_URL.'echanges/top/{1h|24h|7d}',
+                    'echange_top_limit' => BASE_URL.'echanges/top/{1h|24h|7d}/limit/{number}',
+                ];
+        
+                $this->set_response($url, REST_Controller::HTTP_OK);
                 return;
+
             }
         }
 
-        if (isset($where)) {
+        if (isset($where) && $where) {
 
             $name = 'echange_'.$where[0]['value'].'_'.$limit;
 
-            $jointure = array(
-                0 => array(
-                    'table' => 'echange',
-                    'champs' => 'idMonnaieCrypto'
+            $sql = array(
+                'table' => 'monnaie_crypto',
+                'join' => array(
+                    0 => array(
+                        'table' => 'echange',
+                        'champs' => 'idMonnaieCrypto',
+                        'sens' => 'left'
+                    ),
                 ),
+                'where' => $where,
+                'order' => array(
+                    0 => array(
+                        'champs' => "last_update",
+                        'order' => 'DESC',
+                    ),
+                ),
+                'limit' => $limit
             );
 
-            $order = array(
-                0 => array(
-                    'champs' => "last_update",
-                    'order' => 'DESC',
-                ),
-            );
-
-            $data = $this->sql->getCache($name, 'monnaie_crypto', $where, $jointure, $order, $limit);
+            $data = $this->sql->getCache($name, $sql);
 
             if (isset($data)) {
 
@@ -138,12 +177,14 @@ class API extends REST_Controller
         }
 
         $url = [
-            'echange_id' => BASE_URL.'/api/echanges/id/{number}',
-            'echange_id_limit' => BASE_URL.'/api/echanges/id/{number}/limit/{number}',
-            'echange_id_date' => BASE_URL.'/api/echanges/id/{number}/date/{date}',
-            'echange_symb' => BASE_URL.'/api/echanges/symbol/{String}',
-            'echange_symb_limit' => BASE_URL.'/api/echanges/symbol/{String}/limit/{number}',
-            'echange_symb_date' => BASE_URL.'/api/echanges/symbol/{String}/date/{date}',
+            'echange_id' => BASE_URL.'echanges/id/{number}',
+            'echange_id_limit' => BASE_URL.'echanges/id/{number}/limit/{number}',
+            'echange_id_date' => BASE_URL.'echanges/id/{number}/date/{date}',
+            'echange_symb' => BASE_URL.'echanges/symbol/{String}',
+            'echange_symb_limit' => BASE_URL.'echanges/symbol/{String}/limit/{number}',
+            'echange_symb_date' => BASE_URL.'echanges/symbol/{String}/date/{date}',
+            'echange_top' => BASE_URL.'echanges/top/{1h|24h|7d}',
+            'echange_top_limit' => BASE_URL.'echanges/top/{1h|24h|7d}/limit/{number}',
         ];
 
         $this->set_response($url, REST_Controller::HTTP_OK);
@@ -159,21 +200,26 @@ class API extends REST_Controller
 
             $name = 'histo_'.$where[0]['value'].'_'.$limit;
 
-            $jointure = array(
-                0 => array(
-                    'table' => 'historique_prix',
-                    'champs' => 'idMonnaieCrypto'
+            $sql = array(
+                'table' => 'monnaie_crypto',
+                'join' => array(
+                    0 => array(
+                        'table' => 'historique_prix',
+                        'champs' => 'idMonnaieCrypto',
+                        'sens' => 'left'
+                    ),
                 ),
+                'where' => $where,
+                'order' => array(
+                    0 => array(
+                        'champs' => "last_update",
+                        'order' => 'DESC',
+                    ),
+                ),
+                'limit' => $limit
             );
 
-            $order = array(
-                0 => array(
-                    'champs' => "last_update",
-                    'order' => 'DESC',
-                ),
-            );
-
-            $data = $this->sql->getCache($name, 'monnaie_crypto', $where, $jointure, $order, $limit);
+            $data = $this->sql->getCache($name, $sql);
 
             if (isset($data)) {
 

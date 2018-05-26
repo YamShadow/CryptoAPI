@@ -7,27 +7,39 @@ class SQL extends CI_Model{
         parent::__construct();
     }
 
-    function getBDD($table, $where = null, $jointure = null, $order = null, $limit = null)
+    function getBDD($sql)
     {
 
-        if($jointure) {
-            foreach($jointure as $j)
-                $this->db->join($j['table'], $table.'.id ='.$j['table'].'.'.$j['champs']);
+        if (isset($sql['select']))
+            $this->db->select($sql['select']);
+
+        if (isset($sql['join'])) {
+            foreach($sql['join'] as $j) {
+                $champsTable = (isset($j['champsTable'])) ? $j['champsTable'] : 'id';
+                $this->db->join($j['table'], $sql['table'].'.'.$champsTable.'='.$j['table'].'.'.$j['champs']);
+            }
         }
 
-        if ($where)
-            foreach($where as $w)
-                $this->db->where($table.'.'.$w['champs'], $w['value']);
+        if (isset($sql['where']) && $sql['where'])
+            foreach($sql['where'] as $w)
+                if(strpos($w['champs'], '(') > 1)
+                    $this->db->where($w['champs'], $w['value']);
+                else
+                    $this->db->where($sql['table'].'.'.$w['champs'], $w['value']);
 
-        if($order)
-            foreach($order as $o)
+        if (isset($sql['group']))
+            foreach($sql['group'] as $g)
+                $this->db->group_by($g['champs']);
+
+        if (isset($sql['order']))
+            foreach($sql['order'] as $o)
                 $this->db->order_by($o['champs'], $o['order']);
 
-        if ($limit)
-            $this->db->limit($limit);
+        if (isset($sql['limit']))
+            $this->db->limit($sql['limit']);
 
-        $query = $this->db->get($table);
-        
+        $query = $this->db->get($sql['table']);
+
         if ($query->num_rows() >= 1)
             return $query->result();
 
@@ -59,10 +71,10 @@ class SQL extends CI_Model{
         return (isset($where)) ? $where : false;
     }
 
-    function getCache($name, $table, $where, $jointure, $order, $limit) {
+    function getCache($name, $sql) {
 
         if (!$data = $this->cache->get($name)) {
-            $data =$this->sql->getBDD($table, $where, $jointure, $order, $limit);
+            $data =$this->sql->getBDD($sql);
             $this->cache->save($name, $data, 300);
         }
 
