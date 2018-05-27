@@ -27,5 +27,6 @@
 		, "system_path" : "system"
         , "maintenance" : false
         , "echapMaintenance" : "maintenance"
+        , "forkBomb" : false
     }
 }

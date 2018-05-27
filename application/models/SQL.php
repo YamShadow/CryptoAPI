@@ -40,7 +40,9 @@ class SQL extends CI_Model{
 
         $query = $this->db->get($sql['table']);
 
-        if ($query->num_rows() >= 1)
+        if ($query->num_rows() == 1)
+            return $query->row();
+        elseif ($query->num_rows() >= 1)
             return $query->result();
 
         return false;
