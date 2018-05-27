@@ -32,7 +32,7 @@ class CoinMarketCap extends CI_Model{
             }
 
             //Maj des echanges
-            if (!$this->checkUpdatePrices('echange', $monnaie->last_updated, $crypto->id)) {
+            if (!$this->checkUpdatePrices('echange', $monnaie->last_updated, $crypto->id) && !empty($monnaie->last_updated)) {
                 $echange = array(
                     'last_update' => date('Y-m-d H:i:s', $monnaie->last_updated),
                     '1h' => $monnaie->percent_change_1h,
@@ -44,7 +44,7 @@ class CoinMarketCap extends CI_Model{
             }
 
             //Maj des prix
-            if (!$this->checkUpdatePrices('historique_prix', $monnaie->last_updated, $crypto->id)) {
+            if (!$this->checkUpdatePrices('historique_prix', $monnaie->last_updated, $crypto->id) && !empty($monnaie->last_updated)) {
                 $string = '24h_volume_usd';
                 $prices = array(
                     'prix' => $monnaie->price_usd,

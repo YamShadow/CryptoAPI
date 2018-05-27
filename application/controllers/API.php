@@ -88,7 +88,7 @@ class API extends REST_Controller
             $date = explode("-", $this->get('date'));
         }
         else {
-            $date = array('date("Y")', 'date("m")', 'date("d")');
+            $date = array(date("Y"), date("m"), date("d"));
         }
 
         if (isset($top) && $top) {

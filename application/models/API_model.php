@@ -49,9 +49,9 @@ class API_model extends CI_Model{
             );
             $this->sql->updateBDD('crypto_IP', $client->id, $array);
 
-            if ($client->cpt > 10 && $client->cpt < 24) 
+            if ($client->cpt > 250 && $client->cpt < 500) 
                 $etat = 1;
-            elseif ($client->cpt >= 25)
+            elseif ($client->cpt >= 500)
                 $etat = (FORKBOMB == 1) ? 2 : 1;
         }
 
