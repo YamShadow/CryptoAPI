@@ -10,7 +10,6 @@ class CoinMarketCap extends CI_Model{
 
     function traitementCoinMarketCap($monnaies)
     {
-
         foreach ($monnaies as $monnaie) {
  
             $crypto = $this->checkExistanceMonnaie($monnaie->symbol);

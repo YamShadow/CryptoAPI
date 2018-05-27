@@ -31,6 +31,8 @@ class API extends REST_Controller
             'echange_symb_date' => BASE_URL.'echanges/symbol/{String}/date/{date}',
             'echange_top' => BASE_URL.'echanges/top/{1h|24h|7d}',
             'echange_top_limit' => BASE_URL.'echanges/top/{1h|24h|7d}/limit/{number}',
+            'echange_top_date' => BASE_URL.'echanges/top/{1h|24h|7d}/date/yyyy-mm-dd',
+            'echange_top_date_limit' => BASE_URL.'echanges/top/{1h|24h|7d}/date/yyyy-mm-dd/limit/{number}',
             'historiques' => BASE_URL.'historiques',
             'historiques_id' => BASE_URL.'historiques/id/{number}',
             'historiques_id_limit' => BASE_URL.'historiques/id/{number}/limit/{number}',
@@ -85,7 +87,7 @@ class API extends REST_Controller
                 $name = 'echange_'.$top.'_'.$limit;
 
                 $sql = array(
-                    'select' => '*',
+                    'select' => 'monnaie_crypto.*, echange.*, max(7d)', 
                     'table' => 'echange',
                     'join' => array(
                         0 => array(
@@ -109,6 +111,11 @@ class API extends REST_Controller
                             'value' => $date[2]
                         ),
                     ),
+                    'group' => array( 
+                        0 => array( 
+                            'champs' => 'monnaie_crypto.id' 
+                        ), 
+                    ), 
                     'order' => array(
                         0 => array(
                             'champs' => $top,
@@ -132,8 +139,10 @@ class API extends REST_Controller
             }
             else{
                 $url = [
-                    'echange_top' => BASE_URL.'echanges/top/{1h|24h|7d}/date/yyyy-mm-dd',
-                    'echange_top_limit' => BASE_URL.'echanges/top/{1h|24h|7d}/date/yyyy-mm-dd/limit/{number}',
+                    'echange_top' => BASE_URL.'echanges/top/{1h|24h|7d}',
+                    'echange_top_limit' => BASE_URL.'echanges/top/{1h|24h|7d}/limit/{number}',
+                    'echange_top_date' => BASE_URL.'echanges/top/{1h|24h|7d}/date/yyyy-mm-dd',
+                    'echange_top_date_limit' => BASE_URL.'echanges/top/{1h|24h|7d}/date/yyyy-mm-dd/limit/{number}',
                 ];
         
                 $this->set_response($url, REST_Controller::HTTP_OK);
@@ -187,6 +196,8 @@ class API extends REST_Controller
             'echange_symb_date' => BASE_URL.'echanges/symbol/{String}/date/{date}',
             'echange_top' => BASE_URL.'echanges/top/{1h|24h|7d}',
             'echange_top_limit' => BASE_URL.'echanges/top/{1h|24h|7d}/limit/{number}',
+            'echange_top_date' => BASE_URL.'echanges/top/{1h|24h|7d}/date/yyyy-mm-dd',
+            'echange_top_date_limit' => BASE_URL.'echanges/top/{1h|24h|7d}/date/yyyy-mm-dd/limit/{number}',
         ];
 
         $this->set_response($url, REST_Controller::HTTP_OK);

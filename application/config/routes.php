@@ -99,6 +99,7 @@ $route['historiques/symbol/(.*)/limit/(:num)'] = 'API/historiques/symbol/$1/limi
 $route['historiques/symbol/(.*)/date/(.*)'] = 'API/historiques/symbol/$1/date/$2'; // Toutes les historiques d'une monnaie via son symbol avec date
 
 //Top des crypto-monnaies en fonction des échanges à une date donnée
+$route['echanges/top/(.*)'] = 'API/echanges/top/$1';
 $route['echanges/top/(.*)/date/(.*)'] = 'API/echanges/top/$1/date/$2';
 
 $route['(.*)'] = "API";
