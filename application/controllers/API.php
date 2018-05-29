@@ -45,11 +45,11 @@ class API extends REST_Controller
             'historiques_id' => BASE_URL.'historiques/id/{number}',
             'historiques_id_limit' => BASE_URL.'historiques/id/{number}/limit/{number}',
             'historiques_id_date' => BASE_URL.'historiques/id/{number}/date/{date}',
-            "historiques_id_date_limit": BASE_URL."historiques/id/{number}/date/{date}/limit/{number}",
+            "historiques_id_date_limit" => BASE_URL."historiques/id/{number}/date/{date}/limit/{number}",
             'historiques_symb' => BASE_URL.'historiques/symbol/{String}',
             'historiques_symb_limit' => BASE_URL.'historiques/symbol/{String}/limit/{number}',
             'historiques_symb_date' => BASE_URL.'historiques/symbol/{String}/date/{date}',
-            "historiques_symb_date_limit": BASE_URL."historiques/symbol/{String}/date/{date}/limit/{number}",
+            "historiques_symb_date_limit" => BASE_URL."historiques/symbol/{String}/date/{date}/limit/{number}",
         );
 
        // $this->set_response($url, REST_Controller::HTTP_OK);
@@ -274,11 +274,11 @@ class API extends REST_Controller
             'historiques_id' => BASE_URL.'/api/historiques/id/{number}',
             'historiques_id_limit' => BASE_URL.'/api/historiques/id/{number}/limit/{number}',
             'historiques_id_date' => BASE_URL.'/api/historiques/id/{number}/date/{date}',
-            "historiques_id_date_limit": BASE_URL."historiques/id/{number}/date/{date}/limit/{number}",
+            "historiques_id_date_limit" => BASE_URL."historiques/id/{number}/date/{date}/limit/{number}",
             'historiques_symb' => BASE_URL.'historiques/symbol/{String}',
             'historiques_symb_limit' => BASE_URL.'historiques/symbol/{String}/limit/{number}',
             'historiques_symb_date' => BASE_URL.'historiques/symbol/{String}/date/{date}',
-            "historiques_symb_date_limit": BASE_URL."historiques/symbol/{String}/date/{date}/limit/{number}",
+            "historiques_symb_date_limit" => BASE_URL."historiques/symbol/{String}/date/{date}/limit/{number}",
         ];
         if($this->api->getEtat() == 0)
             $this->set_response($url, REST_Controller::HTTP_OK);
