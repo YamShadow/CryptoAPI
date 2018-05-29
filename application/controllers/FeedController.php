@@ -46,5 +46,9 @@ class FeedController extends CI_Controller {
         echo 'Feed Fixer ok !<br/>';
     }
 
+    public function redirectDoc() {
+        redirect('https://github.com/YamShadow/CryptoAPI');
+    }
+
 
 }

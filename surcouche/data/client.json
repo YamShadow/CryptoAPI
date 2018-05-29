@@ -2,7 +2,7 @@
     "client": {
         "base_url": {
             "git" : "CryptoAPI/"
-            , "prod" : "yamishadow.fr"
+            , "prod" : "yamishadow.fr/Crypto/"
             , "ssl" : false
         }
 		, "database" : {

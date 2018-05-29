@@ -58,14 +58,12 @@ $route['FeedController'] = 'FeedController'; // Feed
 
 /*
 | -------------------------------------------------------------------------
-| Sample REST API Routes
+| REST API Routes
 | -------------------------------------------------------------------------
 */
 
-//Example
-$route['api/example/users/(:num)'] = 'API/example/users/id/$1'; // Example
-
-//$route['api'] = 'API/'; //Liste des routes
+$route['feedAPI'] = 'FeedController'; //Liste des routes
+$route['documentation'] = "FeedController/redirectDoc";
 
 //Currencies by id and symbol
 $route['cryptocurrencies'] = 'API/cryptocurrencies'; // Toutes les crypto-monnaies
