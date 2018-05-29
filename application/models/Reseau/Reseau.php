@@ -20,11 +20,11 @@ class Reseau extends CI_Model{
      * @param $data
      * @param $path
      */
-    function initTrameReseau($path, $modeCurl, $bus = null){
-        
+    function initTrameReseau($path, $modeCurl, $bus = null)
+    {    
         $codeHTTP = $this->getHTTP($path);
         $codeValide = array(200, 301, 302);
-        if(in_array($codeHTTP, $codeValide)) {
+        if (in_array($codeHTTP, $codeValide)) {
             switch($modeCurl){
                 case 'post':
                     $curl = $this->post($path, $bus);
@@ -51,61 +51,33 @@ class Reseau extends CI_Model{
 
     /**** cURL ****/
 
-    /**
-     * Methode getHTTP qui permet de recuperer l'entete http par cURL
-     * @param $lien
-     * @return mixed
-     */
-    function getHTTP($lien){
+    function getHTTP($lien)
+    {
         return $this->cURL($lien, 5, 'entete');
     }
-    /**
-     * Methode get qui permet de faire une méthode get en cURL
-     * @param $lien
-     * @return mixed
-     */
-    function get($lien){
+
+    function get($lien)
+    {
         return $this->cURL($lien, 5, 'get');
     }
-    /**
-     * Methode get qui permet de faire une méthode post en cURL
-     * @param $lien
-     * @param $data
-     * @return mixed
-     */
-    function post($lien, $data){
+    
+    function post($lien, $data)
+    {
         return $this->cURL($lien, 5, 'post', $data);
     }
 
-    /**
-     * Methode delete qui permet de faire une méthode post en cURL
-     * @param $lien
-     * @param $data
-     * @return mixed
-     */
-    function delete($lien, $data){
+    function delete($lien, $data)
+    {
         return $this->cURL($lien, 5, 'delete', $data);
     }
 
-    /**
-     * Methode put qui permet de faire une méthode post en cURL
-     * @param $lien
-     * @param $data
-     * @return mixed
-     */
-    function put($lien, $data){
+    function put($lien, $data)
+    {
         return $this->cURL($lien, 5, 'put', $data);
     }
 
-    /**
-     * Methode cURL qui permet d'executer le mode cURL en fonction des parametres de signature
-     * @param $url
-     * @param $timeout
-     * @param $mode
-     * @param null $data
-     * @return mixed
-     */
-    function cURL($url, $timeout, $mode, $data = null){
+    function cURL($url, $timeout, $mode, $data = null)
+    {
         $modePossible = array('get', 'post', 'put', 'delete', 'entete');
 
         if (in_array($mode, $modePossible)) {
@@ -119,10 +91,11 @@ class Reseau extends CI_Model{
                 curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
                 curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
             }
+
             curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
 
-            switch(strtolower($mode)){
+            switch (strtolower($mode)) {
                 case 'entete':
                     curl_setopt($curl, CURLOPT_NOBODY, true);
                     break;
@@ -141,8 +114,6 @@ class Reseau extends CI_Model{
 
             $response = curl_exec($curl);
    
-
-            //var_dump($url, $response);
             if ($response || $response == '') {
                 if (strtolower($mode) == 'entete') {
                     $http_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
@@ -154,12 +125,10 @@ class Reseau extends CI_Model{
                     return $response;
                 }
             } else
-                die('Reseau 40P08');
+                die('Reseau 10R3');
             return;
         } else
-            die('Reseau 40P07');
+            die('Reseau 10R4');
     }
 
 }
-
-    

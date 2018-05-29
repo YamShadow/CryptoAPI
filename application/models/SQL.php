@@ -9,7 +9,6 @@ class SQL extends CI_Model{
 
     function getBDD($sql)
     {
-
         if (isset($sql['select']))
             $this->db->select($sql['select']);
 
@@ -48,16 +47,18 @@ class SQL extends CI_Model{
         return false;
     }
 
-    function getLimit($limit) { 
+    function getLimit($limit) 
+    { 
        return ($limit !== null) ? $limit : '50';
     }
 
-    function getDate($date) { 
+    function getDate($date) 
+    { 
        return ($date !== null) ? explode("-", $this->get('date')) : array(date("Y"), date("m"), date("d"));
     }
 
-    function getWhere($id, $symbol = null) {
-
+    function getWhere($id, $symbol = null)
+    {
         if ($id) {
             $where = array(
                 0 => array(
@@ -65,7 +66,7 @@ class SQL extends CI_Model{
                     'value' => $id
                 ),
             );
-        } else if ($symbol) {
+        } elseif ($symbol) {
             $where = array(
                 0 => array(
                     'champs' => 'symbol',
@@ -77,8 +78,8 @@ class SQL extends CI_Model{
         return (isset($where)) ? $where : false;
     }
 
-    function getCache($name, $sql) {
-
+    function getCache($name, $sql) 
+    {
         if (!$data = $this->cache->get($name)) {
             $data =$this->sql->getBDD($sql);
             $this->cache->save($name, $data, 300);
@@ -101,9 +102,6 @@ class SQL extends CI_Model{
                     ->update($table, $data);
 
         return true;
-        // if($query->affected_rows() >=1)
-        //     return true;
-        // return false;
     }
 
 }

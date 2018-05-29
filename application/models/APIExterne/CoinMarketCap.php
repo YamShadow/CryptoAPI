@@ -15,23 +15,24 @@ class CoinMarketCap extends CI_Model{
             $crypto = $this->checkExistanceMonnaie($monnaie->symbol);
 
             if (!$crypto) {
-                // Ajout de la crypto
+
                 $array = array(
                     'name' => $monnaie->name,
                     'symbol' => $monnaie->symbol,
                     'rank' => $monnaie->rank,
                 );
                 $idCrypto = $this->sql->insertBDD('monnaie_crypto', $array);
-                if($idCrypto)
+
+                if ($idCrypto)
                     $crypto = $this->checkExistanceMonnaie($monnaie->symbol);
             } else {
                 $array = array(
                     'rank' => $monnaie->rank
                 );
+
                 $return = $this->sql->updateBDD('monnaie_crypto', $crypto->id, $array);
             }
 
-            //Maj des echanges
             if (!$this->checkUpdatePrices('echange', $monnaie->last_updated, $crypto->id) && !empty($monnaie->last_updated)) {
                 $echange = array(
                     'last_update' => date('Y-m-d H:i:s', $monnaie->last_updated),
@@ -40,10 +41,10 @@ class CoinMarketCap extends CI_Model{
                     '7d' => $monnaie->percent_change_7d,
                     'idMonnaieCrypto' => $crypto->id
                 );
+
                 $res = $this->sql->insertBDD('echange', $echange);
             }
 
-            //Maj des prix
             if (!$this->checkUpdatePrices('historique_prix', $monnaie->last_updated, $crypto->id) && !empty($monnaie->last_updated)) {
                 $string = '24h_volume_usd';
                 $prices = array(

@@ -1,21 +1,3 @@
-<!-- // set API Endpoint and API key 
-$endpoint = 'latest';
-$access_key = 'API_KEY';
-
-// Initialize CURL:
-$ch = curl_init('http://data.fixer.io/api/'.$endpoint.'?access_key='.$access_key.'');
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-// Store the data:
-$json = curl_exec($ch);
-curl_close($ch);
-
-// Decode JSON response:
-$exchangeRates = json_decode($json, true);
-
-// Access the exchange rate values, e.g. GBP:
-echo $exchangeRates['rates']['GBP']; -->
-
 <?php
 
 class Fixer extends CI_Model{
@@ -49,11 +31,10 @@ class Fixer extends CI_Model{
     }
 
     function addMonnaie($data) {
-        foreach($data as $key => $name) {
+        foreach ($data as $key => $name) {
             $monnaie = $this->checkExistanceMonnaie($key);
 
             if (!$monnaie) {
-
                 $array = array(
                     'name' => $name,
                     'symbol' => $key,
@@ -65,12 +46,12 @@ class Fixer extends CI_Model{
     }
 
     function AddRates($data) {
-        foreach($data->rates as $symbol => $rates) {
+        foreach ($data->rates as $symbol => $rates) {
 
             $monnaie = $this->checkExistanceMonnaie($symbol);
             $time = date('Y-m-d H:i:s', $data->timestamp);
 
-            if($monnaie && !$this->checkUpdatePrices($time, $monnaie->id)) {
+            if ($monnaie && !$this->checkUpdatePrices($time, $monnaie->id)) {
                 $array = array(
                     'rate' => $rates,
                     'base' => $data->base,

@@ -33,6 +33,7 @@ PHP 7.x requis.
             "cryptocurrencies":"/cryptocurrencies",
             "cryptocurrencies_id":"/cryptocurrencies/id/{number}",
             "cryptocurrencies_symbol":"/cryptocurrencies/symbol/{String}",
+            "documentation":"/documentation"
             "echange":"/echanges",
             "echange_id":"/echanges/id/{number}",
             "echange_id_limit":"/echanges/id/{number}/limit/{number}",
@@ -44,6 +45,7 @@ PHP 7.x requis.
             "echange_top_limit":"/echanges/top/{1h|24h|7d}/limit/{number}",
             "echange_top_date":"/echanges/top/{1h|24h|7d}/date/{date}",
             "echange_top_date_limit":"/echanges/top/{1h|24h|7d}/date/{date}/limit/{number}",
+            "feedAPI":"/feedAPI",
             "historiques":"/historiques",
             "historiques_id":"/historiques/id/{number}",
             "historiques_id_limit":"/historiques/id/{number}/limit/{number}",

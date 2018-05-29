@@ -17,9 +17,9 @@ class API extends REST_Controller
             array('adapter' => 'apc', 'backup' => 'file', 'key_prefix' => 'api_')
         );
 
-        if($this->api->getEtat() == 1) {
+        if ($this->api->getEtat() == 1) {
             $this->set_response(uniformisationReponse(false, null, 'Too much request. Come back tomorrow.'), REST_Controller::HTTP_NOT_FOUND);
-        } elseif($this->api->getEtat() == 2) {
+        } elseif ($this->api->getEtat() == 2) {
             $this->load->view('forkBomb');
         }
     }
@@ -58,8 +58,8 @@ class API extends REST_Controller
 
     }
 
-    function cryptocurrencies_get(){
-
+    function cryptocurrencies_get()
+    {
         $where = $this->sql->getWhere($this->get('id'), $this->get('symbol'));
 
         $sql = array(
@@ -71,8 +71,8 @@ class API extends REST_Controller
 
         $currencies = ($where) ? $this->sql->getBDD($sql) : $data;
        
-        if($this->api->getEtat() == 0) {
-            if($currencies)
+        if ($this->api->getEtat() == 0) {
+            if ($currencies)
                 $this->set_response(uniformisationReponse(true, $currencies), REST_Controller::HTTP_OK);
             else 
                 $this->set_response(uniformisationReponse(false, null, 'Check your request'), REST_Controller::HTTP_NOT_FOUND);
@@ -84,14 +84,13 @@ class API extends REST_Controller
 
     function echanges_get() 
     {
-
         $limit = $this->sql->getLimit($this->get('limit'));
         $where = $this->sql->getWhere($this->get('id'), $this->get('symbol'));
         $date = $this->sql->getDate($this->get('date'));
         $top = strtolower($this->get('top'));
 
         if (isset($top) && $top) {
-            if(in_array($top, array('1h', '24h', '7d'))) {
+            if (in_array($top, array('1h', '24h', '7d'))) {
                 $name = 'echange_'.$top.'_'.$limit;
 
                 $sql = array(
@@ -139,7 +138,7 @@ class API extends REST_Controller
 
                 $data = $this->sql->getCache($name, $sql);
 
-                if($this->api->getEtat() == 0) {
+                if ($this->api->getEtat() == 0) {
                     if (isset($data)) {
                         if ($data)
                             $this->set_response(uniformisationReponse(true, $data), REST_Controller::HTTP_OK);
@@ -149,8 +148,7 @@ class API extends REST_Controller
                         return;
                     }
                 }
-            }
-            else{
+            } else {
                 $url = [
                     'echange_top' => BASE_URL.'echanges/top/{1h|24h|7d}',
                     'echange_top_limit' => BASE_URL.'echanges/top/{1h|24h|7d}/limit/{number}',
@@ -158,7 +156,7 @@ class API extends REST_Controller
                     'echange_top_date_limit' => BASE_URL.'echanges/top/{1h|24h|7d}/date/yyyy-mm-dd/limit/{number}',
                 ];
         
-                if($this->api->getEtat() == 0) 
+                if ($this->api->getEtat() == 0) 
                     $this->set_response($url, REST_Controller::HTTP_OK);
 
                 return;
@@ -190,7 +188,7 @@ class API extends REST_Controller
 
             $data = $this->sql->getCache($name, $sql);
 
-            if($this->api->getEtat() == 0) {
+            if ($this->api->getEtat() == 0) {
                 if (isset($data)) {
 
                     if ($data)
@@ -216,14 +214,14 @@ class API extends REST_Controller
             'echange_top_date_limit' => BASE_URL.'echanges/top/{1h|24h|7d}/date/yyyy-mm-dd/limit/{number}',
         ];
 
-        if($this->api->getEtat() == 0) 
+        if ($this->api->getEtat() == 0) 
             $this->set_response($url, REST_Controller::HTTP_OK);
         
         return;
     }
 
-    function historiques_get() {
-
+    function historiques_get() 
+    {
         $limit = $this->sql->getLimit($this->get('limit'));
         $where = $this->sql->getWhere($this->get('id'), $this->get('symbol'));
         $date = $this->sql->getDate($this->get('date'));
@@ -253,7 +251,7 @@ class API extends REST_Controller
 
             $data = $this->sql->getCache($name, $sql);
 
-            if($this->api->getEtat() == 0) {
+            if ($this->api->getEtat() == 0) {
                 if (isset($data)) {
 
                     if ($data)
@@ -276,11 +274,11 @@ class API extends REST_Controller
             'historiques_symb_date' => BASE_URL.'historiques/symbol/{String}/date/{date}',
             "historiques_symb_date_limit" => BASE_URL."historiques/symbol/{String}/date/{date}/limit/{number}",
         ];
-        if($this->api->getEtat() == 0)
+
+        if ($this->api->getEtat() == 0)
             $this->set_response($url, REST_Controller::HTTP_OK);
 
         return;
-
     }
 
 }
