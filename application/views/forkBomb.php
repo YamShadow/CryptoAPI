@@ -25,13 +25,9 @@
     <script>
         var ForkBomb = function App() {
 			var _this = this;
-
 			this.nodes = document.createElement('div');
-
 			this.forkLimit = 35;
-
 			this.totalNodeLength = 1;
-
 			this.interval = null;
 
 			this.destroy = function () {

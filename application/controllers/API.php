@@ -52,7 +52,7 @@ class API extends REST_Controller
             "historiques_symb_date_limit" => BASE_URL."historiques/symbol/{String}/date/{date}/limit/{number}",
         );
 
-       // $this->set_response($url, REST_Controller::HTTP_OK);
+        $this->set_response($url, REST_Controller::HTTP_OK);
 
     }
 
@@ -85,14 +85,8 @@ class API extends REST_Controller
 
         $limit = $this->sql->getLimit($this->get('limit'));
         $where = $this->sql->getWhere($this->get('id'), $this->get('symbol'));
+        $date = $this->sql->getDate($this->get('date'));
         $top = strtolower($this->get('top'));
-
-        if (isset($date) && $date) {
-            $date = explode("-", $this->get('date'));
-        }
-        else {
-            $date = array(date("Y"), date("m"), date("d"));
-        }
 
         if (isset($top) && $top) {
             if(in_array($top, array('1h', '24h', '7d'))) {
@@ -145,7 +139,6 @@ class API extends REST_Controller
 
                 if($this->api->getEtat() == 0) {
                     if (isset($data)) {
-
                         if ($data)
                             $this->set_response(uniformisationReponse(true, $data), REST_Controller::HTTP_OK);
                         else
@@ -231,6 +224,7 @@ class API extends REST_Controller
 
         $limit = $this->sql->getLimit($this->get('limit'));
         $where = $this->sql->getWhere($this->get('id'), $this->get('symbol'));
+        $date = $this->sql->getDate($this->get('date'));
 
         if (isset($where)) {
 

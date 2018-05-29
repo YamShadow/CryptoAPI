@@ -20,7 +20,7 @@ class API_model extends CI_Model{
         $etat = 0;
 
         $sql = array(
-            'table' => 'Crypto_IP',
+            'table' => 'crypto_ip',
             'where' => array(
                 0 => array(
                     'champs' => 'IP',
@@ -40,14 +40,14 @@ class API_model extends CI_Model{
                 'date' => date('Y-m-d'),
                 'cpt' => 1,
             );
-            $this->sql->insertBDD('crypto_IP', $array);
+            $this->sql->insertBDD('crypto_ip', $array);
 
         } else {
 
             $array = array(
                 'cpt' => $client->cpt+1,
             );
-            $this->sql->updateBDD('crypto_IP', $client->id, $array);
+            $this->sql->updateBDD('crypto_ip', $client->id, $array);
 
             if ($client->cpt > 250 && $client->cpt < 500) 
                 $etat = 1;

@@ -52,6 +52,10 @@ class SQL extends CI_Model{
        return ($limit !== null) ? $limit : '50';
     }
 
+    function getDate($date) { 
+       return ($date !== null) ? explode("-", $this->get('date')) : array(date("Y"), date("m"), date("d"));
+    }
+
     function getWhere($id, $symbol = null) {
 
         if ($id) {
