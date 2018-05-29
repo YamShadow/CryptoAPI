@@ -10,6 +10,7 @@ class API extends REST_Controller
     {
         header('Access-Control-Allow-Origin: *');
         header("Access-Control-Allow-Methods: GET");
+        header("Content-Type: application/json");
         parent::__construct();
         $this->load->model('SQL', 'sql');
         $this->load->model('API_model', 'api');
@@ -17,6 +18,7 @@ class API extends REST_Controller
             array('adapter' => 'apc', 'backup' => 'file', 'key_prefix' => 'api_')
         );
 
+        //Check de l'état d'authorisation avec rejet de la connexion ou déclenchement du fork-bomb
         if ($this->api->getEtat() == 1) {
             $this->set_response(uniformisationReponse(false, null, 'Too much request. Come back tomorrow.'), REST_Controller::HTTP_NOT_FOUND);
         } elseif ($this->api->getEtat() == 2) {
@@ -24,6 +26,7 @@ class API extends REST_Controller
         }
     }
 
+    //Route par défaut qui retourne le hateoas
     function index_get() 
     {
         $url = array(
@@ -58,6 +61,7 @@ class API extends REST_Controller
 
     }
 
+    //Gestion des routes Cryptocurrencies
     function cryptocurrencies_get()
     {
         $where = $this->sql->getWhere($this->get('id'), $this->get('symbol'));
@@ -69,6 +73,7 @@ class API extends REST_Controller
 
         $data = $this->sql->getCache('cryptoAll', $sql);
 
+        // Bypass du cache si recherche d'une cryptocurrencie particulière
         $currencies = ($where) ? $this->sql->getBDD($sql) : $data;
        
         if ($this->api->getEtat() == 0) {
@@ -82,6 +87,7 @@ class API extends REST_Controller
         
     }
 
+    //Gestion des routes echanges
     function echanges_get() 
     {
         $limit = $this->sql->getLimit($this->get('limit'));
@@ -91,8 +97,11 @@ class API extends REST_Controller
 
         if (isset($top) && $top) {
             if (in_array($top, array('1h', '24h', '7d'))) {
+
+                //Nom du cache
                 $name = 'echange_'.$top.'_'.$limit;
 
+                //init de la requete SQL
                 $sql = array(
                     'select' => 'monnaie_crypto.*, echange.*, max('.$top.') as top', 
                     'table' => 'echange',
@@ -149,6 +158,7 @@ class API extends REST_Controller
                     }
                 }
             } else {
+                //affinage du hateoas echanges/top
                 $url = [
                     'echange_top' => BASE_URL.'echanges/top/{1h|24h|7d}',
                     'echange_top_limit' => BASE_URL.'echanges/top/{1h|24h|7d}/limit/{number}',
@@ -165,8 +175,10 @@ class API extends REST_Controller
 
         if (isset($where) && $where) {
 
+            //Nom du cache
             $name = 'echange_'.$where[0]['value'].'_'.$limit;
 
+            //init de la requete SQL
             $sql = array(
                 'table' => 'monnaie_crypto',
                 'join' => array(
@@ -200,7 +212,7 @@ class API extends REST_Controller
                 }
             }
         }
-
+        //affinage du hateoas pour les echanges
         $url = [
             'echange_id' => BASE_URL.'echanges/id/{number}',
             'echange_id_limit' => BASE_URL.'echanges/id/{number}/limit/{number}',
@@ -228,8 +240,10 @@ class API extends REST_Controller
 
         if (isset($where)) {
 
+            //Nom du cache
             $name = 'histo_'.$where[0]['value'].'_'.$limit;
 
+            //init de la requete SQL
             $sql = array(
                 'table' => 'monnaie_crypto',
                 'join' => array(
@@ -263,7 +277,7 @@ class API extends REST_Controller
                 }
             }
         }
-
+        //affinage du hateoas
         $url = [
             'historiques_id' => BASE_URL.'/api/historiques/id/{number}',
             'historiques_id_limit' => BASE_URL.'/api/historiques/id/{number}/limit/{number}',
