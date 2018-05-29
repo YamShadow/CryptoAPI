@@ -3,7 +3,7 @@
 // $prod URL
 // $git dossier local
 // $ssl protocole true/false
-
+// Set de la config de la base url
 function conf_baseurl($prod, $git, $ssl){
     $url = $ssl ? 'https://' : 'http://';
     if($prod{strlen($prod)-1} != '/')
@@ -21,6 +21,7 @@ function conf_baseurl($prod, $git, $ssl){
     return $url . $git;
 }
 
+//set de la config BDD
 function conf_bdd($database){
     if (ENVIRONMENT == 'production') 
         return $database['prod'];

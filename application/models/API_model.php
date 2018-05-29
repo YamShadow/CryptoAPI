@@ -11,10 +11,12 @@ class API_model extends CI_Model{
         $this->etat = $this->controleAPI();
     }
 
+    // Getter d'Etat
     function getEtat() {
         return $this->etat;
     }
 
+    //Methode qui controle les entrées dans l'API
     private function controleAPI() 
     {
         $etat = 0;
@@ -32,7 +34,7 @@ class API_model extends CI_Model{
                 ),
             )
         );
-
+        //Recherche l'utilisateur en BDD par rapport a son IP et la date du jour
         if (!$client = $this->sql->getBDD($sql)) {
 
             $array = array(
@@ -40,6 +42,7 @@ class API_model extends CI_Model{
                 'date' => date('Y-m-d'),
                 'cpt' => 1,
             );
+            //Ajout de l'utilisateur inconnue
             $this->sql->insertBDD('crypto_ip', $array);
 
         } else {
@@ -47,18 +50,20 @@ class API_model extends CI_Model{
             $array = array(
                 'cpt' => $client->cpt+1,
             );
+            //Update du compteur de connexion
             $this->sql->updateBDD('crypto_ip', $client->id, $array);
 
             if ($client->cpt > 250 && $client->cpt < 500) 
-                $etat = 1;
+                $etat = 1; //Limitation de l'API 
             elseif ($client->cpt >= 500)
-                $etat = (FORKBOMB == 1) ? 2 : 1;
+                $etat = (FORKBOMB == 1) ? 2 : 1; //Déclanchement du fork-Bom (Activer FORBOMB dans surcouche/data/Client)
         }
 
         return $etat;
 
       }
       
+    //Récuperation de l'IP
     private function getIp() 
     {
           if (isset($_SERVER['HTTP_CLIENT_IP']))

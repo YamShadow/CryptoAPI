@@ -8,6 +8,7 @@ class Fixer extends CI_Model{
         $this->load->model('SQL', 'sql');
     }
 
+    // Methode checkExistanceMonnaie vérifie si la monnaie existe en BDD
     function checkExistanceMonnaie($symb)
     {
         $query = $this->db->where('symbol', $symb)
@@ -18,6 +19,7 @@ class Fixer extends CI_Model{
         return false;
     }
 
+    //Methode checkUpdatePrices qui vérifie si le combo last_update et la monnaie existe déjà en base
     function checkUpdatePrices($lastUpdated, $idMonnaie) 
     {
         $query = $this->db->where('last_update', $lastUpdated)
@@ -30,8 +32,10 @@ class Fixer extends CI_Model{
         
     }
 
+    //Methode AddMonnaie qui rajoute les monnaies en BDD
     function addMonnaie($data) {
         foreach ($data as $key => $name) {
+            //Recuperation de la monnaie en BDD
             $monnaie = $this->checkExistanceMonnaie($key);
 
             if (!$monnaie) {
@@ -45,10 +49,13 @@ class Fixer extends CI_Model{
         }
     }
 
+    //Methode AddRates qui permet de rajouté les rates dans la BDD
     function AddRates($data) {
         foreach ($data->rates as $symbol => $rates) {
 
+            //Recuperation de la monnaie en BDD
             $monnaie = $this->checkExistanceMonnaie($symbol);
+            //conversion du timestamp
             $time = date('Y-m-d H:i:s', $data->timestamp);
 
             if ($monnaie && !$this->checkUpdatePrices($time, $monnaie->id)) {

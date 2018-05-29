@@ -12,7 +12,6 @@ class Reseau extends CI_Model{
      */
     function __construct(){
         parent::__construct();
-        $this->load->model('Reseau/Reseau_Bus', 'bus');
     }
 
     /**
@@ -51,31 +50,37 @@ class Reseau extends CI_Model{
 
     /**** cURL ****/
 
+    //Methode getHTTP qui permet de ping le serveur
     function getHTTP($lien)
     {
         return $this->cURL($lien, 5, 'entete');
     }
 
+    //Methode HTTP get
     function get($lien)
     {
         return $this->cURL($lien, 5, 'get');
     }
     
+    //Methode HTTP post
     function post($lien, $data)
     {
         return $this->cURL($lien, 5, 'post', $data);
     }
 
+    //Methode HTTP delete
     function delete($lien, $data)
     {
         return $this->cURL($lien, 5, 'delete', $data);
     }
 
+    //Methode HTTP put
     function put($lien, $data)
     {
         return $this->cURL($lien, 5, 'put', $data);
     }
 
+    // Init les paramettres du cURL
     function cURL($url, $timeout, $mode, $data = null)
     {
         $modePossible = array('get', 'post', 'put', 'delete', 'entete');
